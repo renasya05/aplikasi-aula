@@ -1,305 +1,522 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Login | SAPA</title>
 
-    <title>Login - SAPA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f3f5f8;
+            font-family: 'Inter', Arial, sans-serif;
             min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* =========================
+           HALAMAN LOGIN
+        ========================= */
+
+        .login-page {
+            min-height: 100vh;
+            width: 100%;
 
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
 
-            color: #263238;
+            padding: 50px 8%;
+
+            position: relative;
+
+            background-image:
+                linear-gradient(
+                    90deg,
+                    rgba(7, 27, 47, 0.82),
+                    rgba(7, 27, 47, 0.55),
+                    rgba(7, 27, 47, 0.25)
+                ),
+                url('{{ asset('images/login-bg.jpg') }}');
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        .login-container {
-            width: 100%;
-            max-width: 430px;
-            padding: 20px;
+        /* =========================
+           BAGIAN KIRI
+        ========================= */
+
+        .welcome-section {
+            width: 52%;
+            max-width: 650px;
+            color: white;
+            z-index: 2;
         }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .line {
+            width: 75px;
+            height: 5px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-section h1 {
+            font-size: 48px;
+            line-height: 1.15;
+            font-weight: 800;
+            margin-bottom: 22px;
+        }
+
+        .welcome-section p {
+            max-width: 540px;
+            font-size: 19px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.94);
+        }
+
+        /* =========================
+           KARTU LOGIN
+        ========================= */
 
         .login-card {
-            background: #ffffff;
-            border: 1px solid #e1e5e9;
+            width: 440px;
+            background: rgba(255, 255, 255, 0.97);
+
+            border-radius: 24px;
+
+            padding: 42px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+
+            z-index: 3;
+        }
+
+        .login-header {
+            margin-bottom: 28px;
+        }
+
+        .login-header h2 {
+            color: #12355b;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #667085;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           ALERT
+        ========================= */
+
+        .alert {
+            padding: 14px 16px;
             border-radius: 10px;
-            padding: 35px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .logo {
-            width: 65px;
-            height: 65px;
-
-            margin: 0 auto 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #1f4e79;
-            color: white;
-
-            border-radius: 8px;
-
-            font-size: 21px;
-            font-weight: bold;
-        }
-
-        .title {
-            text-align: center;
-            color: #1f2933;
-            font-size: 25px;
-            margin-bottom: 7px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #6b7280;
+            margin-bottom: 20px;
             font-size: 14px;
-            margin-bottom: 30px;
+            line-height: 1.5;
         }
+
+        .alert-danger {
+            color: #991b1b;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            color: #166534;
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
-        label {
+        .form-group label {
             display: block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 7px;
-            color: #374151;
+            color: #263238;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        input {
+        .form-group input {
             width: 100%;
-            height: 45px;
-            padding: 0 13px;
+            height: 54px;
 
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            border: 1px solid #d5dbe2;
+            border-radius: 11px;
 
-            font-size: 14px;
+            padding: 0 16px;
+
+            background: white;
+
+            font-family: inherit;
+            font-size: 16px;
+
             outline: none;
 
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
-        input:focus {
-            border-color: #1f4e79;
+        .form-group input:focus {
+            border-color: #12355b;
+
+            box-shadow:
+                0 0 0 3px rgba(18, 53, 91, 0.10);
         }
 
-        .remember {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            margin-bottom: 20px;
-
-            font-size: 13px;
-            color: #6b7280;
+        .form-group input::placeholder {
+            color: #9aa3ad;
         }
 
-        .remember input {
-            width: 15px;
-            height: 15px;
-        }
+        /* =========================
+           BUTTON
+        ========================= */
 
-        .btn-login {
+        .login-button {
             width: 100%;
-            height: 45px;
+            height: 55px;
 
             border: none;
-            border-radius: 6px;
+            border-radius: 11px;
 
-            background: #1f4e79;
+            background: #12355b;
             color: white;
 
-            font-size: 14px;
-            font-weight: bold;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 700;
 
             cursor: pointer;
+
+            margin-top: 5px;
+
+            transition: all 0.2s ease;
         }
 
-        .btn-login:hover {
-            background: #173a5c;
+        .login-button:hover {
+            background: #0d2947;
+            transform: translateY(-1px);
         }
+
+        /* =========================
+           REGISTER
+        ========================= */
 
         .register-text {
             text-align: center;
-            margin-top: 23px;
 
-            color: #6b7280;
-            font-size: 14px;
+            margin-top: 24px;
+
+            color: #667085;
+            font-size: 15px;
         }
 
         .register-text a {
-            color: #1f4e79;
+            color: #12355b;
+            font-weight: 700;
             text-decoration: none;
-            font-weight: bold;
         }
 
         .register-text a:hover {
             text-decoration: underline;
         }
 
-        .alert {
-            padding: 12px 14px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-
-        .alert-success {
-            background: #ecfdf5;
-            color: #166534;
-            border: 1px solid #bbf7d0;
-        }
-
-        .alert-error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
+        /* =========================
+           ERROR
+        ========================= */
 
         .error-text {
-            display: block;
-            margin-top: 6px;
             color: #dc2626;
-            font-size: 12px;
+            font-size: 13px;
+            margin-top: 6px;
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #9ca3af;
-            font-size: 12px;
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            body {
+                overflow-y: auto;
+            }
+
+            .login-page {
+                flex-direction: column;
+                justify-content: center;
+                gap: 35px;
+
+                padding: 45px 25px;
+
+                min-height: 100vh;
+            }
+
+            .welcome-section {
+                width: 100%;
+                max-width: 650px;
+                text-align: center;
+            }
+
+            .line {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .welcome-section h1 {
+                font-size: 38px;
+            }
+
+            .welcome-section p {
+                margin: auto;
+                font-size: 17px;
+            }
+
+            .login-card {
+                width: min(440px, 100%);
+            }
+        }
+
+        /* =========================
+           HP
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-page {
+                padding: 30px 18px;
+            }
+
+            .brand {
+                font-size: 20px;
+            }
+
+            .welcome-section h1 {
+                font-size: 30px;
+            }
+
+            .welcome-section p {
+                font-size: 15px;
+            }
+
+            .login-card {
+                padding: 30px 24px;
+                border-radius: 20px;
+            }
+
+            .login-header h2 {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+    <div class="login-page">
 
-    <div class="login-card">
+        <!-- BAGIAN KIRI -->
 
-        <div class="logo">
-            SA
+        <div class="welcome-section">
+
+            <div class="brand">
+                SAPA
+            </div>
+
+            <div class="line"></div>
+
+            <h1>
+                Sistem Aplikasi<br>
+                Pemanfaatan Aula
+            </h1>
+
+            <p>
+                Selamat datang di SAPA.
+                Kelola pendaftaran dan pemakaian aula
+                dengan mudah, cepat, dan terorganisir.
+            </p>
+
         </div>
 
-        <h1 class="title">SAPA</h1>
 
-        <p class="subtitle">
-            Sistem Aplikasi Pemakaian Aula
-        </p>
+        <!-- FORM LOGIN -->
 
-        {{-- Pesan sukses --}}
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+        <div class="login-card">
+
+            <div class="login-header">
+
+                <h2>
+                    Selamat Datang
+                </h2>
+
+                <p>
+                    Silakan masuk untuk melanjutkan ke sistem.
+                </p>
+
             </div>
-        @endif
 
-        {{-- Pesan error --}}
-        @if($errors->any())
-            <div class="alert alert-error">
-                {{ $errors->first() }}
-            </div>
-        @endif
 
-        <form action="{{ route('login.process') }}" method="POST">
+            {{-- PESAN BERHASIL --}}
 
-            @csrf
+            @if(session('success'))
 
-            <div class="form-group">
-                <label for="email">
-                    Email
-                </label>
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
 
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    placeholder="Masukkan email"
-                    required
-                    autofocus
+            @endif
+
+
+            {{-- PESAN ERROR --}}
+
+            @if(session('error'))
+
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+
+            @endif
+
+
+            {{-- VALIDATION ERROR --}}
+
+            @if($errors->any())
+
+                <div class="alert alert-danger">
+                    {{ $errors->first() }}
+                </div>
+
+            @endif
+
+
+            <form
+                method="POST"
+                action="{{ route('login.process') }}"
+            >
+
+                @csrf
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="Masukkan email"
+                        required
+                        autofocus
+                    >
+
+                    @error('email')
+
+                        <div class="error-text">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Masukkan password"
+                        required
+                    >
+
+                    @error('password')
+
+                        <div class="error-text">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-button"
                 >
+                    Masuk
+                </button>
 
-                @error('email')
-                    <span class="error-text">
-                        {{ $message }}
-                    </span>
-                @enderror
+            </form>
+
+
+            <!-- REGISTER -->
+
+            <div class="register-text">
+
+                Belum memiliki akun?
+
+                <a href="{{ route('register') }}">
+                    Daftar sekarang
+                </a>
+
             </div>
 
-            <div class="form-group">
-                <label for="password">
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Masukkan password"
-                    required
-                >
-
-                @error('password')
-                    <span class="error-text">
-                        {{ $message }}
-                    </span>
-                @enderror
-            </div>
-
-            <label class="remember">
-                <input
-                    type="checkbox"
-                    name="remember"
-                    value="1"
-                >
-
-                Ingat saya
-            </label>
-
-            <button type="submit" class="btn-login">
-                Masuk
-            </button>
-
-        </form>
-
-        <div class="register-text">
-            Belum memiliki akun?
-
-            <a href="{{ route('register') }}">
-                Daftar sekarang
-            </a>
         </div>
 
     </div>
-
-    <div class="footer">
-        SAPA &copy; {{ date('Y') }}
-    </div>
-
-</div>
 
 </body>
+
 </html>

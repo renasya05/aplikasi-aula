@@ -514,7 +514,31 @@
                                         <strong>{{ $pendaftaran->nama_pemohon }}</strong>
                                         <div style="font-size:11px; color:#6b7280;">{{ $pendaftaran->email }}</div>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($pendaftaran->tanggal)->format('d-m-Y') }}</td>
+                                   <td>
+                                        @if ($pendaftaran->tanggal_mulai && $pendaftaran->tanggal_selesai)
+
+                                            @if ($pendaftaran->tanggal_mulai == $pendaftaran->tanggal_selesai)
+
+                                                {{ \Carbon\Carbon::parse($pendaftaran->tanggal_mulai)
+                                                    ->locale('id')
+                                                    ->translatedFormat('d-m-Y') }}
+
+                                            @else
+
+                                                {{ \Carbon\Carbon::parse($pendaftaran->tanggal_mulai)
+                                                    ->locale('id')
+                                                    ->translatedFormat('d-m-Y') }}
+                                                –
+                                                {{ \Carbon\Carbon::parse($pendaftaran->tanggal_selesai)
+                                                    ->locale('id')
+                                                    ->translatedFormat('d-m-Y') }}
+
+                                            @endif
+
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($pendaftaran->jam_mulai)->format('H:i') }} -
                                         {{ \Carbon\Carbon::parse($pendaftaran->jam_selesai)->format('H:i') }}

@@ -5,28 +5,78 @@ namespace App\Http\Controllers;
 use App\Models\Aula;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 class PendaftaranController extends Controller
 {
     /**
-     * Menampilkan form pemakaian aula.
+     * Struktur organisasi dan bagian/seksi.
      */
-    public function create(Aula $aula)
+    private function strukturOrganisasi(): array
     {
-        return view('pendaftaran.create', [
-            'user' => Auth::user(),
-            'aula' => $aula,
-        ]);
+        return [
+            'Sekretariat' => [
+                'Subbagian Perencanaan dan Pelaporan',
+                'Subbagian Keuangan dan Aset',
+                'Subbagian Umum dan Kepegawaian',
+            ],
+
+            'Bidang Informasi Publik dan Statistik' => [
+                'Seksi Layanan Informasi Publik',
+                'Seksi Pengelolaan Informasi Publik dan Media',
+                'Seksi Pengelolaan Data Statistik',
+            ],
+
+            'Bidang Komunikasi Publik' => [
+                'Seksi Pengelolaan Opini Publik',
+                'Seksi Sumber Daya Komunikasi Publik dan Kehumasan',
+                'Seksi Kemitraan Komunikasi Publik dan Hubungan Media',
+            ],
+
+            'Bidang Aplikasi Informatika' => [
+                'Seksi Pengembangan Aplikasi',
+                'Seksi Infrastruktur E-Government',
+                'Seksi Tata Kelola dan Ekosistem E-Government',
+            ],
+
+            'Bidang Persandian dan Keamanan Informasi' => [
+                'Seksi Pengembangan Kapasitas Tata Kelola Persandian dan Keamanan Informasi',
+                'Seksi Layanan Persandian dan Keamanan Informasi',
+                'Seksi Monitoring, Evaluasi dan Audit Persandian dan Keamanan Informasi',
+            ],
+        ];
     }
 
     /**
-     * Menyimpan pengajuan pemakaian aula.
+     * Menampilkan form pendaftaran.
+     *
+     * Untuk sementara verifikasi lokasi dilewati,
+     * sehingga user dapat langsung masuk ke form.
+     */
+    public function create(Aula $aula)
+    {
+        $struktur = $this->strukturOrganisasi();
+        $user = Auth::user();
+
+        return view(
+            'pendaftaran.create',
+            compact(
+                'aula',
+                'struktur',
+                'user'
+            )
+        );
+    }
+
+    /**
+     * Menyimpan pendaftaran baru.
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        /**
+         * Validasi data form.
+         */
+        $validated = $request->validate([
             'aula_id' => [
                 'required',
                 'exists:aulas,id',
@@ -41,6 +91,7 @@ class PendaftaranController extends Controller
             'nip' => [
                 'required',
                 'string',
+                'regex:/^(?:-|\d+)$/',
                 'max:50',
             ],
 
@@ -50,38 +101,44 @@ class PendaftaranController extends Controller
                 'max:255',
             ],
 
-            'unit_organisasi' => [
+            'peserta_asal' => [
                 'required',
-                Rule::in([
-                    'Sekretariat',
-                    'Bidang Informasi Publik dan Statistik',
-                    'Bidang Komunikasi Publik',
-                    'Bidang Aplikasi Informatika',
-                    'Bidang Persandian dan Keamanan Informasi',
-                ]),
+                'in:internal,eksternal,internal_eksternal',
             ],
 
-            'email' => [
-                'required',
-                'email',
+            'unit_organisasi' => [
+                'nullable',
+                'string',
                 'max:255',
             ],
 
-            'tanggal' => [
+            'bagian_seksi' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'instansi' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'tanggal_mulai' => [
                 'required',
                 'date',
                 'after_or_equal:today',
             ],
 
-            'jam_mulai' => [
+            'tanggal_selesai' => [
                 'required',
-                'date_format:H:i',
+                'date',
+                'after_or_equal:tanggal_mulai',
             ],
 
-            'jam_selesai' => [
+            'kriteria_waktu' => [
                 'required',
-                'date_format:H:i',
-                'after:jam_mulai',
+                'in:pagi_siang,siang_sore,malam',
             ],
 
             'jumlah_peserta' => [
@@ -90,200 +147,421 @@ class PendaftaranController extends Controller
                 'min:1',
             ],
 
-            'peserta_pihak_luar' => [
-                'required',
-                Rule::in([
-                    'ada',
-                    'tidak_ada',
-                ]),
-            ],
-
             'keperluan' => [
                 'required',
                 'string',
             ],
-        ], [
-
-            'aula_id.required' =>
-                'Jenis aula wajib dipilih.',
-
-            'aula_id.exists' =>
-                'Aula yang dipilih tidak ditemukan.',
-
-            'nama_pemohon.required' =>
-                'Nama pemohon wajib diisi.',
-
-            'nip.required' =>
-                'NIP wajib diisi.',
-
-            'jabatan.required' =>
-                'Jabatan wajib diisi.',
-
-            'unit_organisasi.required' =>
-                'Unit organisasi wajib dipilih.',
-
-            'unit_organisasi.in' =>
-                'Unit organisasi yang dipilih tidak valid.',
-
-            'email.required' =>
-                'Email wajib diisi.',
-
-            'email.email' =>
-                'Format email tidak valid.',
-
-            'tanggal.required' =>
-                'Tanggal pemakaian wajib diisi.',
-
-            'tanggal.after_or_equal' =>
-                'Tanggal pemakaian tidak boleh sebelum hari ini.',
-
-            'jam_mulai.required' =>
-                'Jam mulai wajib diisi.',
-
-            'jam_selesai.required' =>
-                'Jam selesai wajib diisi.',
-
-            'jam_selesai.after' =>
-                'Jam selesai harus lebih besar dari jam mulai.',
-
-            'jumlah_peserta.required' =>
-                'Jumlah peserta wajib diisi.',
-
-            'jumlah_peserta.min' =>
-                'Jumlah peserta minimal 1 orang.',
-
-            'peserta_pihak_luar.required' =>
-                'Silakan pilih apakah terdapat peserta pihak luar.',
-
-            'peserta_pihak_luar.in' =>
-                'Pilihan peserta pihak luar tidak valid.',
-
-            'keperluan.required' =>
-                'Keperluan wajib diisi.',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | AMBIL DATA AULA
-        |--------------------------------------------------------------------------
-        */
+        /**
+         * Struktur organisasi.
+         */
+        $struktur = $this->strukturOrganisasi();
 
-        $aula = Aula::findOrFail($data['aula_id']);
+        $pesertaAsal = $validated['peserta_asal'];
 
-        /*
-        |--------------------------------------------------------------------------
-        | CEK KAPASITAS AULA
-        |--------------------------------------------------------------------------
-        */
+        $unitOrganisasi = null;
+        $bagianSeksi = null;
+        $instansi = null;
 
-        if ($data['jumlah_peserta'] > $aula->kapasitas) {
+        /**
+         * Peserta Internal.
+         */
+        if ($pesertaAsal === 'internal') {
+
+            if (empty($validated['unit_organisasi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'unit_organisasi' =>
+                            'Bidang / Unit wajib dipilih untuk peserta internal.',
+                    ]);
+            }
+
+            if (empty($validated['bagian_seksi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'bagian_seksi' =>
+                            'Bagian / Seksi wajib dipilih untuk peserta internal.',
+                    ]);
+            }
+
+            $unitOrganisasi = $validated['unit_organisasi'];
+
+            $bagianSeksi = $validated['bagian_seksi'];
+
+            $instansi = 'DISKOMINFO';
+        }
+
+        /**
+         * Peserta Eksternal.
+         */
+        elseif ($pesertaAsal === 'eksternal') {
+
+            if (empty($validated['instansi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'instansi' =>
+                            'Nama Instansi / Organisasi wajib diisi untuk peserta eksternal.',
+                    ]);
+            }
+
+            $instansi = $validated['instansi'];
+        }
+
+        /**
+         * Peserta Internal & Eksternal.
+         */
+        elseif ($pesertaAsal === 'internal_eksternal') {
+
+            if (empty($validated['unit_organisasi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'unit_organisasi' =>
+                            'Bidang / Unit wajib dipilih untuk peserta internal & eksternal.',
+                    ]);
+            }
+
+            if (empty($validated['bagian_seksi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'bagian_seksi' =>
+                            'Bagian / Seksi wajib dipilih untuk peserta internal & eksternal.',
+                    ]);
+            }
+
+            if (empty($validated['instansi'])) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'instansi' =>
+                            'Nama Instansi / Organisasi wajib diisi untuk peserta internal & eksternal.',
+                    ]);
+            }
+
+            $unitOrganisasi = $validated['unit_organisasi'];
+
+            $bagianSeksi = $validated['bagian_seksi'];
+
+            $instansi = $validated['instansi'];
+        }
+
+        /**
+         * Validasi Unit Organisasi dan Bagian/Seksi.
+         */
+        if ($unitOrganisasi !== null) {
+
+            if (!array_key_exists($unitOrganisasi, $struktur)) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'unit_organisasi' =>
+                            'Bidang / Unit yang dipilih tidak valid.',
+                    ]);
+            }
+
+            if (
+                $bagianSeksi !== null &&
+                !in_array(
+                    $bagianSeksi,
+                    $struktur[$unitOrganisasi],
+                    true
+                )
+            ) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'bagian_seksi' =>
+                            'Bagian / Seksi tidak sesuai dengan Bidang / Unit yang dipilih.',
+                    ]);
+            }
+        }
+
+        /**
+         * Ambil data aula.
+         */
+        $aula = Aula::findOrFail(
+            $validated['aula_id']
+        );
+
+        /**
+         * Validasi kapasitas aula.
+         */
+        if (
+            $validated['jumlah_peserta']
+            >
+            $aula->kapasitas
+        ) {
             return back()
                 ->withInput()
                 ->withErrors([
                     'jumlah_peserta' =>
-                        'Jumlah peserta melebihi kapasitas ' .
-                        $aula->nama_aula .
-                        '. Kapasitas maksimal ' .
+                        'Jumlah peserta melebihi kapasitas maksimum aula (' .
                         $aula->kapasitas .
-                        ' orang.',
+                        ' orang).',
                 ]);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | CEK BENTROK JADWAL
-        |--------------------------------------------------------------------------
-        */
-
-        $bentrok = Pendaftaran::where(
-                'aula_id',
-                $data['aula_id']
-            )
+        /**
+         * Cek bentrok jadwal.
+         *
+         * Pendaftaran dengan status menunggu
+         * atau disetujui dianggap menggunakan jadwal.
+         */
+        $bentrok = Pendaftaran::query()
             ->where(
-                'tanggal',
-                $data['tanggal']
+                'aula_id',
+                $aula->id
             )
             ->whereIn(
                 'status',
-                ['menunggu', 'disetujui']
+                [
+                    'menunggu',
+                    'disetujui',
+                ]
             )
-            ->where(function ($query) use ($data) {
-
-                $query
-                    ->where(
-                        'jam_mulai',
-                        '<',
-                        $data['jam_selesai']
-                    )
-                    ->where(
-                        'jam_selesai',
-                        '>',
-                        $data['jam_mulai']
-                    );
-            })
+            ->whereNotNull(
+                'tanggal_mulai'
+            )
+            ->whereNotNull(
+                'tanggal_selesai'
+            )
+            ->where(
+                'tanggal_mulai',
+                '<=',
+                $validated['tanggal_selesai']
+            )
+            ->where(
+                'tanggal_selesai',
+                '>=',
+                $validated['tanggal_mulai']
+            )
+            ->where(
+                'kriteria_waktu',
+                $validated['kriteria_waktu']
+            )
             ->exists();
 
+        /**
+         * Jika jadwal bentrok.
+         */
         if ($bentrok) {
+
+            $namaWaktu = [
+                'pagi_siang' =>
+                    'Pagi – Siang (08.00–13.00)',
+
+                'siang_sore' =>
+                    'Siang – Sore (14.00–16.00)',
+
+                'malam' =>
+                    'Malam (18.00–21.00)',
+            ];
+
             return back()
                 ->withInput()
                 ->withErrors([
-                    'tanggal' =>
-                        'Aula tersebut sudah memiliki pengajuan pada tanggal dan jam yang dipilih.',
+                    'kriteria_waktu' =>
+                        'Waktu ' .
+                        $namaWaktu[
+                            $validated['kriteria_waktu']
+                        ] .
+                        ' sudah digunakan pada rentang tanggal tersebut. Silakan pilih waktu lain.',
                 ]);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | SIMPAN DATA PENGAJUAN
-        |--------------------------------------------------------------------------
-        */
-
+        /**
+         * Simpan pendaftaran.
+         */
         Pendaftaran::create([
-            'user_id' => Auth::id(),
-            'aula_id' => $data['aula_id'],
-            'nama_pemohon' => $data['nama_pemohon'],
-            'nip' => $data['nip'],
-            'jabatan' => $data['jabatan'],
-            'instansi' => $data['unit_organisasi'],
-            'unit_organisasi' => $data['unit_organisasi'],
-            'email' => $data['email'],
-            'tanggal' => $data['tanggal'],
-            'jam_mulai' => $data['jam_mulai'],
-            'jam_selesai' => $data['jam_selesai'],
-            'jumlah_peserta' => $data['jumlah_peserta'],
-            'peserta_pihak_luar' =>
-                $data['peserta_pihak_luar'],
-            'keperluan' => $data['keperluan'],
-            'status' => 'menunggu',
+            'user_id' =>
+                Auth::id(),
+
+            'aula_id' =>
+                $aula->id,
+
+            'nama_pemohon' =>
+                $validated['nama_pemohon'],
+
+            'nip' =>
+                $validated['nip'],
+
+            'jabatan' =>
+                $validated['jabatan'],
+
+            'instansi' =>
+                $instansi,
+
+            'unit_organisasi' =>
+                $unitOrganisasi,
+
+            'bagian_seksi' =>
+                $bagianSeksi,
+
+            'tanggal_mulai' =>
+                $validated['tanggal_mulai'],
+
+            'tanggal_selesai' =>
+                $validated['tanggal_selesai'],
+
+            'kriteria_waktu' =>
+                $validated['kriteria_waktu'],
+
+            'jumlah_peserta' =>
+                $validated['jumlah_peserta'],
+
+            'keperluan' =>
+                $validated['keperluan'],
+
+            'status' =>
+                'menunggu',
+
+            'catatan_admin' =>
+                null,
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | REDIRECT KE RIWAYAT
-        |--------------------------------------------------------------------------
-        */
-
+        /**
+         * Redirect ke riwayat.
+         */
         return redirect()
-            ->route('pendaftaran.history')
+            ->route(
+                'pendaftaran.history'
+            )
             ->with(
                 'success',
-                'Pengajuan pemakaian aula berhasil dikirim dan sedang menunggu persetujuan admin.'
+                'Pendaftaran aula berhasil dikirim dan sedang menunggu persetujuan admin.'
             );
     }
 
     /**
-     * Menampilkan riwayat pemakaian user.
+     * Mengecek ketersediaan waktu.
+     */
+    public function availability(
+        Request $request
+    ) {
+        $validated = $request->validate([
+            'aula_id' => [
+                'required',
+                'exists:aulas,id',
+            ],
+
+            'tanggal_mulai' => [
+                'required',
+                'date',
+            ],
+
+            'tanggal_selesai' => [
+                'required',
+                'date',
+                'after_or_equal:tanggal_mulai',
+            ],
+        ]);
+
+        /**
+         * Ambil waktu yang sudah digunakan.
+         */
+        $terpakai = Pendaftaran::query()
+            ->where(
+                'aula_id',
+                $validated['aula_id']
+            )
+            ->whereIn(
+                'status',
+                [
+                    'menunggu',
+                    'disetujui',
+                ]
+            )
+            ->whereNotNull(
+                'tanggal_mulai'
+            )
+            ->whereNotNull(
+                'tanggal_selesai'
+            )
+            ->where(
+                'tanggal_mulai',
+                '<=',
+                $validated['tanggal_selesai']
+            )
+            ->where(
+                'tanggal_selesai',
+                '>=',
+                $validated['tanggal_mulai']
+            )
+            ->whereIn(
+                'kriteria_waktu',
+                [
+                    'pagi_siang',
+                    'siang_sore',
+                    'malam',
+                ]
+            )
+            ->pluck(
+                'kriteria_waktu'
+            )
+            ->unique()
+            ->values()
+            ->toArray();
+
+        return response()->json([
+            'terpakai' => $terpakai,
+        ]);
+    }
+
+    /**
+     * Riwayat pendaftaran milik user.
      */
     public function history()
     {
-        $pendaftarans = Pendaftaran::with('aula')
-            ->where('user_id', Auth::id())
+        $pendaftarans = Pendaftaran::with(
+            'aula'
+        )
+            ->where(
+                'user_id',
+                Auth::id()
+            )
             ->latest()
             ->get();
 
-        return view('pendaftaran.history', [
-            'user' => Auth::user(),
-            'pendaftarans' => $pendaftarans,
-        ]);
+        return view(
+            'pendaftaran.history',
+            compact(
+                'pendaftarans'
+            )
+        );
+    }
+
+    /**
+     * Detail pendaftaran milik user.
+     */
+    public function show(
+        Pendaftaran $pendaftaran
+    ) {
+        /**
+         * Pastikan user hanya dapat melihat
+         * pendaftarannya sendiri.
+         */
+        if (
+            $pendaftaran->user_id
+            !==
+            Auth::id()
+        ) {
+            abort(403);
+        }
+
+        $pendaftaran->load(
+            'aula'
+        );
+
+        return view(
+            'pendaftaran.show',
+            compact(
+                'pendaftaran'
+            )
+        );
     }
 }

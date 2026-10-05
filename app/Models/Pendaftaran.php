@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pendaftaran extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'aula_id',
@@ -17,29 +15,27 @@ class Pendaftaran extends Model
         'jabatan',
         'instansi',
         'unit_organisasi',
-        'email',
-        'tanggal',
-        'jam_mulai',
-        'jam_selesai',
+        'bagian_seksi',
+        'tanggal_mulai',
+        'tanggal_selesai',
+        'kriteria_waktu',
         'jumlah_peserta',
-        'peserta_pihak_luar',
         'keperluan',
         'status',
         'catatan_admin',
     ];
 
-    /**
-     * Relasi ke user/pemohon.
-     */
-    public function user()
+    protected $casts = [
+        'tanggal_mulai' => 'date',
+        'tanggal_selesai' => 'date',
+    ];
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relasi ke aula.
-     */
-    public function aula()
+    public function aula(): BelongsTo
     {
         return $this->belongsTo(Aula::class);
     }

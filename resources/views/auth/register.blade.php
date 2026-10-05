@@ -19,11 +19,9 @@
             font-family: Arial, Helvetica, sans-serif;
             background: #f3f5f8;
             min-height: 100vh;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             color: #263238;
         }
 
@@ -38,25 +36,19 @@
             border: 1px solid #e1e5e9;
             border-radius: 10px;
             padding: 35px;
-
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
         }
 
         .logo {
             width: 65px;
             height: 65px;
-
             margin: 0 auto 18px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             background: #1f4e79;
             color: white;
-
             border-radius: 8px;
-
             font-size: 21px;
             font-weight: bold;
         }
@@ -83,7 +75,6 @@
         label {
             display: block;
             margin-bottom: 7px;
-
             color: #374151;
             font-size: 14px;
             font-weight: bold;
@@ -92,12 +83,9 @@
         input {
             width: 100%;
             height: 45px;
-
             padding: 0 13px;
-
             border: 1px solid #d1d5db;
             border-radius: 6px;
-
             font-size: 14px;
             outline: none;
         }
@@ -109,16 +97,12 @@
         .btn-register {
             width: 100%;
             height: 45px;
-
             border: none;
             border-radius: 6px;
-
             background: #1f4e79;
             color: white;
-
             font-size: 14px;
             font-weight: bold;
-
             cursor: pointer;
         }
 
@@ -129,7 +113,6 @@
         .login-text {
             text-align: center;
             margin-top: 23px;
-
             color: #6b7280;
             font-size: 14px;
         }
@@ -147,7 +130,6 @@
         .error-text {
             display: block;
             margin-top: 6px;
-
             color: #dc2626;
             font-size: 12px;
         }
@@ -155,20 +137,16 @@
         .alert {
             background: #fef2f2;
             color: #991b1b;
-
             border: 1px solid #fecaca;
             border-radius: 6px;
-
             padding: 12px 14px;
             margin-bottom: 20px;
-
             font-size: 13px;
         }
 
         .footer {
             text-align: center;
             margin-top: 20px;
-
             color: #9ca3af;
             font-size: 12px;
         }

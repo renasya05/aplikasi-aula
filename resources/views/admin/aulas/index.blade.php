@@ -1,975 +1,704 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Data Aula | SAPA')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<style>
+    /* =====================================================
+       PAGE
+    ===================================================== */
 
-    <title>Data Aula | SAPA</title>
+    .admin-aula-page {
+        max-width: 1250px;
+        margin: 0 auto;
+    }
 
 
-    <style>
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-        * {
-            margin: 0;
+    .admin-aula-header {
+        background: linear-gradient(135deg, #12355b, #1d4f7a);
+        border-radius: 16px;
+        padding: 28px 30px;
+        margin-bottom: 22px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-aula-header::after {
+        content: "";
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        border: 35px solid rgba(255,255,255,0.05);
+        right: -55px;
+        top: -80px;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 8px;
+        color: #bfdbfe;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .admin-aula-header h1 {
+        margin: 0 0 7px;
+        color: #ffffff;
+        font-size: 27px;
+        font-weight: 750;
+        letter-spacing: -0.3px;
+    }
+
+    .admin-aula-header p {
+        margin: 0;
+        max-width: 700px;
+        color: #dbeafe;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       HEADER ACTION
+    ===================================================== */
+
+    .header-action {
+        position: absolute;
+        right: 30px;
+        bottom: 28px;
+        z-index: 2;
+    }
+
+    .add-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-height: 42px;
+        padding: 10px 17px;
+        background: #ffffff;
+        color: #12355b;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        transition: 0.2s ease;
+    }
+
+    .add-btn:hover {
+        background: #eff6ff;
+        color: #12355b;
+        transform: translateY(-1px);
+    }
+
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
+    .summary-card {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        width: fit-content;
+        margin-bottom: 22px;
+        padding: 14px 17px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(15,23,42,0.04);
+    }
+
+    .summary-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eff6ff;
+        color: #12355b;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+
+    .summary-card span {
+        display: block;
+        margin-bottom: 2px;
+        color: #64748b;
+        font-size: 10px;
+    }
+
+    .summary-card strong {
+        color: #12355b;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+
+    /* =====================================================
+       DATA CARD
+    ===================================================== */
+
+    .data-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow:
+            0 5px 18px rgba(15,23,42,0.05);
+    }
+
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 20px 22px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        color: #12355b;
+        font-size: 18px;
+        font-weight: 750;
+    }
+
+    .card-header p {
+        margin: 4px 0 0;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .total-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        background: #eff6ff;
+        border-radius: 999px;
+        color: #12355b;
+        font-size: 10px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        min-width: 980px;
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 13px 12px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        color: #475569;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-size: 12px;
+        vertical-align: top;
+        line-height: 1.5;
+    }
+
+    tbody tr {
+        transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+        background: #f8fafc;
+    }
+
+
+    /* =====================================================
+       TABLE CONTENT
+    ===================================================== */
+
+    .number-cell {
+        width: 45px;
+        color: #64748b;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .aula-name {
+        display: block;
+        color: #12355b;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .capacity {
+        color: #334155;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .capacity small {
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 500;
+    }
+
+    .description-cell {
+        max-width: 270px;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .facility-cell {
+        max-width: 240px;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .empty-value {
+        color: #94a3b8;
+    }
+
+
+    /* =====================================================
+       ACTION BUTTONS
+    ===================================================== */
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .action-buttons form {
+        margin: 0;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 7px;
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.2s ease;
+    }
+
+    .action-detail {
+        background: #12355b;
+        color: #ffffff;
+    }
+
+    .action-detail:hover {
+        background: #2563eb;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .action-edit {
+        background: #eff6ff;
+        color: #12355b;
+    }
+
+    .action-edit:hover {
+        background: #dbeafe;
+        color: #12355b;
+    }
+
+    .action-delete {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .action-delete:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+
+    /* =====================================================
+       EMPTY STATE
+    ===================================================== */
+
+    .empty {
+        padding: 65px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 62px;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        background: #eff6ff;
+        border-radius: 15px;
+        font-size: 28px;
+    }
+
+    .empty h3 {
+        margin: 0 0 7px;
+        color: #12355b;
+        font-size: 17px;
+        font-weight: 750;
+    }
+
+    .empty p {
+        margin: 0;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 850px) {
+
+        .admin-aula-header {
+            padding: 24px;
+        }
+
+        .header-action {
+            position: static;
+            margin-top: 18px;
+        }
+
+        .add-btn {
+            width: 100%;
+        }
+
+    }
+
+    @media (max-width: 600px) {
+
+        .admin-aula-page {
             padding: 0;
+        }
+
+        .admin-aula-header {
+            border-radius: 13px;
+            padding: 21px;
+        }
+
+        .admin-aula-header h1 {
+            font-size: 23px;
+        }
+
+        .admin-aula-header p {
+            font-size: 12px;
+        }
+
+        .summary-card {
+            width: 100%;
             box-sizing: border-box;
         }
 
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f9;
-            color: #1f2937;
-        }
-
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        .sidebar {
-
-            position: fixed;
-
-            left: 0;
-            top: 0;
-
-            width: 240px;
-            height: 100vh;
-
-            background: #193b63;
-
-            color: white;
-
-            padding: 28px 15px;
-        }
-
-
-        .logo {
-
-            text-align: center;
-
-            margin-bottom: 35px;
-        }
-
-
-        .logo h1 {
-
-            font-size: 25px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .logo p {
-
-            font-size: 11px;
-
-            line-height: 1.5;
-
-            color: #dbe7f3;
-        }
-
-
-        .menu {
-
-            display: flex;
-
+        .card-header {
+            align-items: flex-start;
             flex-direction: column;
-
-            gap: 8px;
         }
 
+    }
+</style>
 
-        .menu a {
 
-            text-decoration: none;
+<div class="admin-aula-page">
 
-            color: white;
+    {{-- =====================================================
+         HEADER
+    ====================================================== --}}
 
-            padding: 13px 15px;
+    <div class="admin-aula-header">
 
-            border-radius: 6px;
+        <div class="header-content">
 
-            font-size: 14px;
-        }
+            <div class="page-label">
+                <span>▣</span>
+                ADMINISTRATOR
+            </div>
 
+            <h1>
+                Data Aula
+            </h1>
 
-        .menu a:hover {
-
-            background: #28598a;
-        }
-
-
-        .menu a.active {
-
-            background: #28598a;
-
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .main {
-
-            margin-left: 240px;
-
-            min-height: 100vh;
-        }
-
-
-        /* =========================
-           TOPBAR
-        ========================= */
-
-        .topbar {
-
-            height: 72px;
-
-            background: white;
-
-            border-bottom: 1px solid #dfe4ea;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 0 30px;
-        }
-
-
-        .topbar h2 {
-
-            color: #12355b;
-
-            font-size: 20px;
-        }
-
-
-        .admin-area {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-
-        .logout {
-
-            background: #dc3545;
-
-            color: white;
-
-            border: none;
-
-            padding: 9px 16px;
-
-            border-radius: 5px;
-
-            cursor: pointer;
-        }
-
-
-        .logout:hover {
-
-            background: #bb2d3b;
-        }
-
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .content {
-
-            padding: 30px;
-        }
-
-
-        .page-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 25px;
-        }
-
-
-        .page-title h1 {
-
-            color: #12355b;
-
-            font-size: 26px;
-
-            margin-bottom: 7px;
-        }
-
-
-        .page-title p {
-
-            color: #6b7280;
-
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           BUTTON
-        ========================= */
-
-        .btn {
-
-            display: inline-block;
-
-            text-decoration: none;
-
-            border: none;
-
-            border-radius: 5px;
-
-            padding: 10px 16px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-
-        .btn-tambah {
-
-            background: #12355b;
-
-            color: white;
-        }
-
-
-        .btn-tambah:hover {
-
-            background: #0d2946;
-        }
-
-
-        .btn-detail {
-
-            background: #12355b;
-
-            color: white;
-        }
-
-
-        .btn-detail:hover {
-
-            background: #0d2946;
-        }
-
-
-        .btn-edit {
-
-            background: #eaf1f7;
-
-            color: #12355b;
-        }
-
-
-        .btn-edit:hover {
-
-            background: #dbe7f3;
-        }
-
-
-        .btn-hapus {
-
-            background: #fef2f2;
-
-            color: #b91c1c;
-        }
-
-
-        .btn-hapus:hover {
-
-            background: #fee2e2;
-        }
-
-
-        /* =========================
-           ALERT
-        ========================= */
-
-        .alert {
-
-            padding: 14px 16px;
-
-            border-radius: 6px;
-
-            margin-bottom: 20px;
-
-            font-size: 13px;
-        }
-
-
-        .success {
-
-            background: #ecfdf5;
-
-            color: #065f46;
-
-            border: 1px solid #a7f3d0;
-        }
-
-
-        .error {
-
-            background: #fef2f2;
-
-            color: #991b1b;
-
-            border: 1px solid #fecaca;
-        }
-
-
-        /* =========================
-           TABLE
-        ========================= */
-
-        .table-card {
-
-            background: white;
-
-            border: 1px solid #dfe4ea;
-
-            border-radius: 8px;
-
-            overflow: hidden;
-        }
-
-
-        .table-header {
-
-            padding: 18px 20px;
-
-            border-bottom: 1px solid #e5e7eb;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-        }
-
-
-        .table-header h3 {
-
-            color: #12355b;
-
-            font-size: 16px;
-        }
-
-
-        .total {
-
-            color: #64748b;
-
-            font-size: 12px;
-        }
-
-
-        .table-wrapper {
-
-            overflow-x: auto;
-        }
-
-
-        table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-            min-width: 800px;
-        }
-
-
-        thead {
-
-            background: #12355b;
-
-            color: white;
-        }
-
-
-        th {
-
-            padding: 13px 14px;
-
-            text-align: left;
-
-            font-size: 12px;
-        }
-
-
-        td {
-
-            padding: 16px 14px;
-
-            border-bottom: 1px solid #e5e7eb;
-
-            font-size: 13px;
-
-            vertical-align: top;
-        }
-
-
-        tbody tr:hover {
-
-            background: #f8fafc;
-        }
-
-
-        .nama-aula {
-
-            color: #12355b;
-
-            font-weight: bold;
-
-            font-size: 14px;
-        }
-
-
-        .kapasitas {
-
-            font-weight: bold;
-
-            color: #374151;
-        }
-
-
-        .keterangan {
-
-            color: #64748b;
-
-            line-height: 1.5;
-
-            max-width: 280px;
-        }
-
-
-        .fasilitas {
-
-            color: #64748b;
-
-            line-height: 1.5;
-
-            max-width: 300px;
-        }
-
-
-        .actions {
-
-            display: flex;
-
-            gap: 7px;
-
-            align-items: center;
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================= */
-
-        .empty {
-
-            padding: 60px 20px;
-
-            text-align: center;
-
-            color: #6b7280;
-        }
-
-
-        .empty h3 {
-
-            color: #12355b;
-
-            margin-bottom: 8px;
-        }
-
-
-        .empty p {
-
-            font-size: 13px;
-
-            margin-bottom: 20px;
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-
-                width: 190px;
-            }
-
-            .main {
-
-                margin-left: 190px;
-            }
-
-            .content {
-
-                padding: 20px;
-            }
-
-            .page-header {
-
-                align-items: flex-start;
-
-                gap: 15px;
-
-                flex-direction: column;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================
-     SIDEBAR
-========================= -->
-
-<aside class="sidebar">
-
-
-    <div class="logo">
-
-        <h1>
-            SAPA
-        </h1>
-
-        <p>
-            Sistem Aplikasi Pemakaian Aula
-        </p>
-
-    </div>
-
-
-    <nav class="menu">
-
-
-        <a href="{{ route('admin.dashboard') }}">
-            Dashboard
-        </a>
-
-
-        <a href="{{ route('admin.history') }}">
-            Riwayat Pendaftaran
-        </a>
-
-
-        <a
-            href="{{ route('admin.aulas') }}"
-            class="active"
-        >
-            Data Aula
-        </a>
-
-
-    </nav>
-
-
-</aside>
-
-
-
-<!-- =========================
-     MAIN
-========================= -->
-
-<main class="main">
-
-
-    <!-- TOPBAR -->
-
-    <div class="topbar">
-
-
-        <h2>
-            Data Aula
-        </h2>
-
-
-        <div class="admin-area">
-
-
-            <span>
-                {{ $user->name }}
-            </span>
-
-
-            <form
-                action="{{ route('logout') }}"
-                method="POST"
-            >
-
-                @csrf
-
-                <button
-                    type="submit"
-                    class="logout"
-                >
-                    Logout
-                </button>
-
-            </form>
-
+            <p>
+                Kelola informasi aula yang tersedia untuk pemakaian
+                dan pastikan data aula selalu diperbarui.
+            </p>
 
         </div>
 
 
+        <div class="header-action">
+
+            <a
+                href="{{ route('admin.aulas.create') }}"
+                class="add-btn"
+            >
+                <span>＋</span>
+                Tambah Aula
+            </a>
+
+        </div>
+
     </div>
 
 
+    {{-- =====================================================
+         SUMMARY
+    ====================================================== --}}
 
-    <!-- CONTENT -->
+    <div class="summary-card">
 
-    <div class="content">
+        <div class="summary-icon">
+            ▦
+        </div>
+
+        <div>
+
+            <span>
+                Total Aula
+            </span>
+
+            <strong>
+                {{ $aulas->count() }}
+            </strong>
+
+        </div>
+
+    </div>
 
 
-        <!-- HEADER -->
+    {{-- =====================================================
+         DATA CARD
+    ====================================================== --}}
 
-        <div class="page-header">
+    <div class="data-card">
 
+        <div class="card-header">
 
-            <div class="page-title">
+            <div>
 
-                <h1>
-                    Data Aula
-                </h1>
+                <h2>
+                    Daftar Aula
+                </h2>
 
                 <p>
-                    Kelola informasi aula yang tersedia
-                    untuk peminjaman.
+                    Informasi aula yang tersedia dalam sistem SAPA.
                 </p>
 
             </div>
 
-
-            <a
-                href="{{ route('admin.aulas.create') }}"
-                class="btn btn-tambah"
-            >
-                + TAMBAH AULA
-            </a>
-
+            <div class="total-badge">
+                {{ $aulas->count() }} Aula
+            </div>
 
         </div>
 
 
+        <div class="table-wrapper">
 
-        <!-- ALERT -->
+            <table>
 
-        @if(session('success'))
+                <thead>
 
-            <div class="alert success">
-                {{ session('success') }}
-            </div>
+                    <tr>
 
-        @endif
+                        <th style="width: 50px;">
+                            No
+                        </th>
+                        <th>Nama Aula</th>
+                        <th>Kapasitas</th>
+                        <th>Keterangan</th>
+                        <th>Fasilitas</th>
+                        <th>Aksi</th>
+                    </tr>
 
+                </thead>
 
-        @if(session('error'))
+                <tbody>
 
-            <div class="alert error">
-                {{ session('error') }}
-            </div>
+                    @forelse($aulas as $index => $aula)
 
-        @endif
+                        <tr>
 
+                            {{-- NOMOR --}}
+                            <td class="number-cell">
+                                {{ $index + 1 }}
+                            </td>
 
 
-        <!-- TABLE -->
+                            {{-- NAMA AULA --}}
+                            <td>
 
-        <div class="table-card">
+                                <strong class="aula-name">
+                                    {{ $aula->nama_aula }}
+                                </strong>
 
+                            </td>
 
-            <div class="table-header">
 
+                            {{-- KAPASITAS --}}
+                            <td>
 
-                <h3>
-                    Daftar Aula
-                </h3>
+                                <span class="capacity">
+                                    {{ $aula->kapasitas }}
+                                    <small>orang</small>
+                                </span>
 
+                            </td>
 
-                <span class="total">
 
-                    {{ $aulas->count() }}
-                    aula
+                            {{-- KETERANGAN --}}
+                            <td class="description-cell">
 
-                </span>
+                                {{ $aula->keterangan }}
 
+                            </td>
 
-            </div>
 
+                            {{-- FASILITAS --}}
+                            <td class="facility-cell">
 
+                                @if($aula->fasilitas)
 
-            @if($aulas->count() > 0)
+                                    {{ $aula->fasilitas }}
 
+                                @else
 
-                <div class="table-wrapper">
+                                    <span class="empty-value">
+                                        Belum diisi
+                                    </span>
 
+                                @endif
 
-                    <table>
+                            </td>
 
 
-                        <thead>
+                            {{-- AKSI --}}
+                            <td>
 
-                            <tr>
+                                <div class="action-buttons">
 
-                                <th>
-                                    No
-                                </th>
+                                    <a
+                                        href="{{ route('admin.aulas.show', $aula) }}"
+                                        class="action-detail"
+                                    >
+                                        Detail
+                                    </a>
 
-                                <th>
-                                    Nama Aula
-                                </th>
 
-                                <th>
-                                    Kapasitas
-                                </th>
+                                    <a
+                                        href="{{ route('admin.aulas.edit', $aula) }}"
+                                        class="action-edit"
+                                    >
+                                        Edit
+                                    </a>
 
-                                <th>
-                                    Keterangan
-                                </th>
 
-                                <th>
-                                    Fasilitas
-                                </th>
+                                    <form
+                                        action="{{ route('admin.aulas.destroy', $aula) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus aula ini?')"
+                                    >
 
-                                <th>
-                                    Aksi
-                                </th>
+                                        @csrf
+                                        @method('DELETE')
 
-                            </tr>
+                                        <button
+                                            type="submit"
+                                            class="action-delete"
+                                        >
+                                            Hapus
+                                        </button>
 
-                        </thead>
+                                    </form>
 
+                                </div>
 
-                        <tbody>
+                            </td>
 
+                        </tr>
 
-                            @foreach(
-                                $aulas as $index => $aula
-                            )
+                    @empty
 
+                        <tr>
 
-                                <tr>
+                            <td colspan="6">
 
+                                <div class="empty">
 
-                                    <td>
-                                        {{ $index + 1 }}
-                                    </td>
+                                    <div class="empty-icon">
+                                        🏢
+                                    </div>
 
+                                    <h3>
+                                        Belum Ada Data Aula
+                                    </h3>
 
-                                    <td>
+                                    <p>
+                                        Silakan tambahkan data aula baru
+                                        melalui tombol Tambah Aula.
+                                    </p>
 
-                                        <div class="nama-aula">
+                                </div>
 
-                                            {{ $aula->nama_aula }}
+                            </td>
 
-                                        </div>
+                        </tr>
 
-                                    </td>
+                    @endforelse
 
+                </tbody>
 
-                                    <td>
-
-                                        <span class="kapasitas">
-
-                                            {{ $aula->kapasitas }}
-
-                                            orang
-
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="keterangan">
-
-                                            {{ $aula->keterangan }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="fasilitas">
-
-                                            {{ $aula->fasilitas ?? '-' }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-
-
-                                        <div class="actions">
-
-
-                                            <a
-                                                href="{{
-                                                    route(
-                                                        'admin.aulas.show',
-                                                        $aula->id
-                                                    )
-                                                }}"
-                                                class="btn btn-detail"
-                                            >
-                                                DETAIL
-                                            </a>
-
-
-                                            <a
-                                                href="{{
-                                                    route(
-                                                        'admin.aulas.edit',
-                                                        $aula->id
-                                                    )
-                                                }}"
-                                                class="btn btn-edit"
-                                            >
-                                                EDIT
-                                            </a>
-
-
-                                            <form
-                                                action="{{
-                                                    route(
-                                                        'admin.aulas.destroy',
-                                                        $aula->id
-                                                    )
-                                                }}"
-                                                method="POST"
-                                                onsubmit="return confirm(
-                                                    'Apakah Anda yakin ingin menghapus aula ini?'
-                                                )"
-                                            >
-
-                                                @csrf
-
-                                                @method('DELETE')
-
-
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-hapus"
-                                                >
-                                                    HAPUS
-                                                </button>
-
-
-                                            </form>
-
-
-                                        </div>
-
-
-                                    </td>
-
-
-                                </tr>
-
-
-                            @endforeach
-
-
-                        </tbody>
-
-
-                    </table>
-
-
-                </div>
-
-
-            @else
-
-
-                <div class="empty">
-
-
-                    <h3>
-                        Belum Ada Data Aula
-                    </h3>
-
-
-                    <p>
-                        Silakan tambahkan data aula
-                        terlebih dahulu.
-                    </p>
-
-
-                    <a
-                        href="{{
-                            route('admin.aulas.create')
-                        }}"
-                        class="btn btn-tambah"
-                    >
-                        + TAMBAH AULA
-                    </a>
-
-
-                </div>
-
-
-            @endif
-
+            </table>
 
         </div>
-
 
     </div>
 
+</div>
 
-</main>
-
-
-</body>
-
-</html>
+@endsection

@@ -1,799 +1,351 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Dashboard Admin | SAPA</title>
-
-
-    <style>
-
-        /* =========================
-           RESET
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        /* =========================
-           BODY
-        ========================= */
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            color: #1f2937;
-        }
-
-
-        /* =========================
-           LAYOUT
-        ========================= */
-
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        .sidebar {
-            width: 240px;
-            background: #17365d;
-            color: white;
-
-            padding: 25px 15px;
-
-            min-height: 100vh;
-
-            flex-shrink: 0;
-        }
-
-
-        /* =========================
-           LOGO
-        ========================= */
-
-        .logo {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .logo h2 {
-            font-size: 25px;
-            letter-spacing: 1px;
-        }
-
-        .logo p {
-            font-size: 11px;
-            color: #dbeafe;
-            line-height: 1.5;
-            margin-top: 7px;
-        }
-
-
-        /* =========================
-           SIDEBAR MENU
-        ========================= */
-
-        .menu a {
-            display: block;
-
-            text-decoration: none;
-
-            color: white;
-
-            padding: 13px 15px;
-
-            margin-bottom: 8px;
-
-            border-radius: 6px;
-
-            font-size: 14px;
-
-            transition: 0.2s;
-        }
-
-        .menu a:hover {
-            background: #244d7d;
-        }
-
-        .menu a.active {
-            background: #244d7d;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .main {
-            flex: 1;
-            min-width: 0;
-        }
-
-
-        /* =========================
-           TOPBAR
-        ========================= */
-
-        .topbar {
-            height: 70px;
-
-            background: white;
-
-            border-bottom: 1px solid #ddd;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 0 30px;
-        }
-
-        .topbar h3 {
-            color: #17365d;
-            font-size: 20px;
-        }
-
-
-        /* =========================
-           ADMIN INFO
-        ========================= */
-
-        .admin-info {
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-        }
-
-        .admin-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           LOGOUT
-        ========================= */
-
-        .logout button {
-            background: #dc3545;
-
-            color: white;
-
-            border: none;
-
-            padding: 9px 15px;
-
-            border-radius: 5px;
-
-            cursor: pointer;
-
-            font-size: 13px;
-
-            transition: 0.2s;
-        }
-
-        .logout button:hover {
-            background: #b02a37;
-        }
-
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .content {
-            padding: 30px;
-        }
-
-
-        /* =========================
-           WELCOME
-        ========================= */
-
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .welcome h2 {
-            color: #17365d;
-
-            margin-bottom: 7px;
-
-            font-size: 24px;
-        }
-
-        .welcome p {
-            color: #6b7280;
-
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           STATISTICS
-        ========================= */
-
-        .stats {
-            display: grid;
-
-            grid-template-columns: repeat(4, 1fr);
-
-            gap: 20px;
-
-            margin-bottom: 30px;
-        }
-
-
-        .stat {
-            background: white;
-
-            border-radius: 8px;
-
-            padding: 22px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.05);
-
-            border-left: 4px solid #17365d;
-        }
-
-
-        .stat small {
-            display: block;
-
-            color: #6b7280;
-
-            font-size: 13px;
-
-            margin-bottom: 10px;
-        }
-
-
-        .stat strong {
-            font-size: 30px;
-
-            color: #17365d;
-        }
-
-
-        /* =========================
-           MENU ADMINISTRASI
-        ========================= */
-
-        .card {
-            background: white;
-
-            border-radius: 8px;
-
-            padding: 25px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.05);
-        }
-
-
-        .card > h3 {
-            color: #17365d;
-
-            margin-bottom: 20px;
-
-            font-size: 20px;
-        }
-
-
-        /* =========================
-           MENU GRID
-        ========================= */
-
-        .menu-grid {
-            display: grid;
-
+@extends('layouts.app')
+
+@section('title', 'Dashboard Admin | SAPA')
+
+@section('content')
+
+<style>
+    .admin-dashboard {
+        max-width: 1250px;
+        margin: 0 auto;
+    }
+
+    .admin-hero {
+        background: linear-gradient(135deg, #0d2946, #12355b);
+        border-radius: 20px;
+        padding: 30px 34px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, .12);
+    }
+
+    .admin-hero h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .admin-hero p {
+        margin: 0;
+        color: #dbeafe;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .section-title {
+        margin-bottom: 15px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+        color: #12355b;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .section-title p {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, .06);
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 14px;
+    }
+
+    .stat-number {
+        font-size: 27px;
+        font-weight: 800;
+        color: #172033;
+    }
+
+    .stat-label {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .stat-total .stat-icon {
+        background: #eaf2fb;
+        color: #12355b;
+    }
+
+    .stat-waiting .stat-icon {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .stat-approved .stat-icon {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .stat-rejected .stat-icon {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .admin-menu {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .menu-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 20px;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, .05);
+        transition: .2s ease;
+    }
+
+    .menu-card:hover {
+        transform: translateY(-3px);
+        border-color: #bfdbfe;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, .09);
+    }
+
+    .menu-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: #eaf2fb;
+        color: #12355b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 13px;
+    }
+
+    .menu-card h3 {
+        margin: 0;
+        color: #12355b;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .menu-card p {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .admin-info {
+        margin-top: 20px;
+        padding: 17px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 14px;
+        color: #475569;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .admin-info strong {
+        color: #12355b;
+    }
+
+    @media(max-width: 950px) {
+        .stats-grid {
             grid-template-columns: repeat(2, 1fr);
-
-            gap: 15px;
-
-            align-items: stretch;
         }
 
+        .admin-menu {
+            grid-template-columns: 1fr;
+        }
+    }
 
-        /* =========================
-           MENU CARD
-        ========================= */
-
-        .menu-card {
-            border: 1px solid #e5e7eb;
-
-            border-radius: 7px;
-
-            padding: 20px;
-
-            text-decoration: none;
-
-            color: #1f2937;
-
-            transition: 0.2s;
-
-            min-height: 190px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            justify-content: space-between;
+    @media(max-width: 550px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
         }
 
-
-        .menu-card:hover {
-            border-color: #17365d;
-
-            background: #f8fafc;
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 4px 10px rgba(0,0,0,0.05);
+        .admin-hero {
+            padding: 25px;
         }
 
-
-        .menu-card h4 {
-            color: #17365d;
-
-            margin-bottom: 10px;
-
-            font-size: 18px;
+        .admin-hero h1 {
+            font-size: 23px;
         }
+    }
+</style>
 
+<div class="admin-dashboard">
 
-        .menu-card p {
-            color: #6b7280;
+    {{-- HERO --}}
+    <section class="admin-hero">
+        <h1>Dashboard Admin</h1>
 
-            font-size: 13px;
+        <p>
+            Selamat datang di panel administrator SAPA.
+            Kelola pengajuan penggunaan aula, data aula,
+            dan laporan melalui halaman ini.
+        </p>
+    </section>
 
-            line-height: 1.6;
+    {{-- STATISTIK --}}
+    <div class="section-title">
+        <h2>Ringkasan Pengajuan</h2>
 
-            margin-bottom: 15px;
-        }
+        <p>
+            Statistik penggunaan aula dan pengajuan pendaftaran.
+        </p>
+    </div>
 
+    <div class="stats-grid">
 
-        /* =========================
-           BUTTON MENU
-        ========================= */
+        <div class="stat-card stat-total">
+            <div class="stat-icon">
+                ▣
+            </div>
 
-        .menu-button {
-            display: inline-block;
+            <div class="stat-number">
+                {{ $stats['totalPendaftar'] }}
+            </div>
 
-            align-self: flex-start;
-
-            background: #17365d;
-
-            color: white;
-
-            padding: 9px 14px;
-
-            border-radius: 4px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-            text-decoration: none;
-
-            transition: 0.2s;
-        }
-
-
-        .menu-button:hover {
-            background: #244d7d;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 1000px) {
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-        }
-
-
-        @media (max-width: 700px) {
-
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .topbar {
-                padding: 0 20px;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-        }
-
-
-        @media (max-width: 650px) {
-
-            .layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-
-                min-height: auto;
-
-                padding: 20px;
-            }
-
-            .logo {
-                margin-bottom: 20px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                height: auto;
-
-                padding: 15px;
-
-                gap: 10px;
-            }
-
-            .content {
-                padding: 20px 15px;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<div class="layout">
-
-
-    <!-- =========================
-         SIDEBAR
-    ========================== -->
-
-    <aside class="sidebar">
-
-
-        <div class="logo">
-
-            <h2>
-                SAPA
-            </h2>
-
-            <p>
-                Sistem Aplikasi Pemakaian Aula
-            </p>
-
+            <div class="stat-label">
+                Total Pendaftaran
+            </div>
         </div>
 
+        <div class="stat-card stat-waiting">
+            <div class="stat-icon">
+                ◷
+            </div>
 
-        <div class="menu">
+            <div class="stat-number">
+                {{ $stats['menunggu'] }}
+            </div>
 
-
-            <!-- DASHBOARD -->
-
-            <a
-                href="{{ route('admin.dashboard') }}"
-                class="active"
-            >
-                Dashboard
-            </a>
-
-
-            <!-- DATA AULA -->
-
-            <a
-                href="{{ route('admin.aulas') }}"
-            >
-                Data Aula
-            </a>
-
-
-            <!-- RIWAYAT -->
-
-            <a
-                href="{{ route('admin.history') }}"
-            >
-                Riwayat Pendaftaran
-            </a>
-
-
+            <div class="stat-label">
+                Menunggu Persetujuan
+            </div>
         </div>
 
+        <div class="stat-card stat-approved">
+            <div class="stat-icon">
+                ✓
+            </div>
 
-    </aside>
+            <div class="stat-number">
+                {{ $stats['disetujui'] }}
+            </div>
 
+            <div class="stat-label">
+                Disetujui
+            </div>
+        </div>
 
+        <div class="stat-card stat-rejected">
+            <div class="stat-icon">
+                !
+            </div>
 
-    <!-- =========================
-         MAIN
-    ========================== -->
+            <div class="stat-number">
+                {{ $stats['ditolak'] }}
+            </div>
 
-    <main class="main">
+            <div class="stat-label">
+                Ditolak
+            </div>
+        </div>
 
+    </div>
 
-        <!-- =========================
-             TOPBAR
-        ========================== -->
+    {{-- MENU ADMIN --}}
+    <div class="section-title">
+        <h2>Menu Administrator</h2>
 
-        <div class="topbar">
+        <p>
+            Pilih menu yang ingin dikelola.
+        </p>
+    </div>
 
+    <div class="admin-menu">
+
+        <a href="{{ route('admin.history') }}" class="menu-card">
+            <div class="menu-icon">
+                ◷
+            </div>
 
             <h3>
-                Dashboard Admin
+                Riwayat Pendaftaran
             </h3>
 
+            <p>
+                Periksa, lihat detail, setujui,
+                atau tolak pengajuan penggunaan aula.
+            </p>
+        </a>
 
-            <div class="admin-info">
-
-
-                <span class="admin-name">
-                    {{ $user->name }}
-                </span>
-
-
-                <form
-                    action="{{ route('logout') }}"
-                    method="POST"
-                    class="logout"
-                >
-
-                    @csrf
-
-                    <button type="submit">
-                        Logout
-                    </button>
-
-                </form>
-
-
+        <a href="{{ route('admin.aulas') }}" class="menu-card">
+            <div class="menu-icon">
+                ▣
             </div>
 
+            <h3>
+                Data Aula
+            </h3>
 
-        </div>
+            <p>
+                Kelola data, kapasitas, fasilitas,
+                dan informasi aula.
+            </p>
+        </a>
 
-
-
-        <!-- =========================
-             CONTENT
-        ========================== -->
-
-        <div class="content">
-
-
-            <!-- =========================
-                 WELCOME
-            ========================== -->
-
-            <div class="welcome">
-
-
-                <h2>
-                    Selamat Datang, {{ $user->name }}
-                </h2>
-
-
-                <p>
-                    Kelola pendaftaran dan pemakaian aula
-                    melalui halaman administrasi SAPA.
-                </p>
-
-
+        <a href="{{ route('admin.laporan') }}" class="menu-card">
+            <div class="menu-icon">
+                ▤
             </div>
 
-
-
-            <!-- =========================
-                 STATISTICS
-            ========================== -->
-
-            <div class="stats">
-
-
-                <!-- TOTAL -->
-
-                <div class="stat">
-
-                    <small>
-                        Total Pendaftaran
-                    </small>
-
-                    <strong>
-                        {{ $stats['total'] }}
-                    </strong>
-
-                </div>
-
-
-                <!-- MENUNGGU -->
-
-                <div class="stat">
-
-                    <small>
-                        Menunggu
-                    </small>
-
-                    <strong>
-                        {{ $stats['menunggu'] }}
-                    </strong>
-
-                </div>
-
-
-                <!-- DISETUJUI -->
-
-                <div class="stat">
-
-                    <small>
-                        Disetujui
-                    </small>
-
-                    <strong>
-                        {{ $stats['disetujui'] }}
-                    </strong>
-
-                </div>
-
-
-                <!-- DITOLAK -->
-
-                <div class="stat">
-
-                    <small>
-                        Ditolak
-                    </small>
-
-                    <strong>
-                        {{ $stats['ditolak'] }}
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =========================
-                 MENU ADMINISTRASI
-            ========================== -->
-
-            <div class="card">
-
-
-                <h3>
-                    Menu Administrasi
-                </h3>
-
-
-                <div class="menu-grid">
-
-
-                    <!-- =====================
-                         RIWAYAT PENDAFTARAN
-                    ====================== -->
-
-                    <div class="menu-card">
-
-
-                        <div>
-
-                            <h4>
-                                Riwayat Pendaftaran
-                            </h4>
-
-
-                            <p>
-                                Melihat seluruh data pendaftaran
-                                dan status pengajuan peminjaman aula.
-                            </p>
-
-                        </div>
-
-
-                        <a
-                            href="{{ route('admin.history') }}"
-                            class="menu-button"
-                        >
-                            LIHAT PENDAFTARAN →
-                        </a>
-
-
-                    </div>
-
-
-
-                    <!-- =====================
-                         DATA AULA
-                    ====================== -->
-
-                    <div class="menu-card">
-
-
-                        <div>
-
-                            <h4>
-                                Data Aula
-                            </h4>
-
-
-                            <p>
-                                Kelola informasi aula yang tersedia,
-                                kapasitas, fasilitas, dan keterangan aula.
-                            </p>
-
-                        </div>
-
-
-                        <a
-                            href="{{ route('admin.aulas') }}"
-                            class="menu-button"
-                        >
-                            KELOLA AULA →
-                        </a>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
+            <h3>
+                Laporan
+            </h3>
+
+            <p>
+                Lihat dan filter data pendaftaran
+                untuk kebutuhan laporan.
+            </p>
+        </a>
+
+    </div>
+
+    <div class="admin-info">
+        <strong>Informasi:</strong>
+        Pengajuan baru akan memiliki status
+        <strong>Menunggu</strong> sampai diperiksa dan
+        diproses oleh administrator.
+    </div>
 
 </div>
 
-
-</body>
-
-</html>
+@endsection

@@ -1,1183 +1,1000 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Riwayat Pendaftaran | SAPA')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<div class="admin-history">
 
-    <title>Riwayat Pendaftaran | SAPA</title>
+    {{-- HEADER --}}
+    <div class="page-top">
 
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f9;
-            color: #1f2937;
-        }
-
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        .sidebar {
-
-            position: fixed;
-
-            left: 0;
-            top: 0;
-
-            width: 240px;
-            height: 100vh;
-
-            background: #193b63;
-
-            color: white;
-
-            padding: 28px 15px;
-        }
-
-
-        .logo {
-
-            text-align: center;
-
-            margin-bottom: 35px;
-        }
-
-
-        .logo h1 {
-
-            font-size: 25px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .logo p {
-
-            font-size: 11px;
-
-            line-height: 1.5;
-
-            color: #dbe7f3;
-        }
-
-
-        .menu {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 8px;
-        }
-
-
-        .menu a {
-
-            text-decoration: none;
-
-            color: white;
-
-            padding: 13px 15px;
-
-            border-radius: 6px;
-
-            font-size: 14px;
-        }
-
-
-        .menu a:hover {
-
-            background: #28598a;
-        }
-
-
-        .menu a.active {
-
-            background: #28598a;
-
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .main {
-
-            margin-left: 240px;
-
-            min-height: 100vh;
-        }
-
-
-        /* =========================
-           TOPBAR
-        ========================= */
-
-        .topbar {
-
-            height: 72px;
-
-            background: white;
-
-            border-bottom: 1px solid #dfe4ea;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 0 30px;
-        }
-
-
-        .topbar h2 {
-
-            color: #12355b;
-
-            font-size: 20px;
-        }
-
-
-        .admin-area {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-
-        .logout {
-
-            background: #dc3545;
-
-            color: white;
-
-            border: none;
-
-            padding: 9px 16px;
-
-            border-radius: 5px;
-
-            cursor: pointer;
-        }
-
-
-        .logout:hover {
-
-            background: #bb2d3b;
-        }
-
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .content {
-
-            padding: 30px;
-        }
-
-
-        .page-title {
-
-            margin-bottom: 25px;
-        }
-
-
-        .page-title h1 {
-
-            color: #12355b;
-
-            font-size: 26px;
-
-            margin-bottom: 7px;
-        }
-
-
-        .page-title p {
-
-            color: #6b7280;
-
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           ALERT
-        ========================= */
-
-        .alert {
-
-            padding: 14px 16px;
-
-            border-radius: 6px;
-
-            margin-bottom: 20px;
-
-            font-size: 13px;
-        }
-
-
-        .success {
-
-            background: #ecfdf5;
-
-            color: #065f46;
-
-            border: 1px solid #a7f3d0;
-        }
-
-
-        .error {
-
-            background: #fef2f2;
-
-            color: #991b1b;
-
-            border: 1px solid #fecaca;
-        }
-
-
-        /* =========================
-           FILTER
-        ========================= */
-
-        .filter-card {
-
-            background: white;
-
-            border: 1px solid #dfe4ea;
-
-            border-radius: 8px;
-
-            padding: 20px;
-
-            margin-bottom: 20px;
-        }
-
-
-        .filter-title {
-
-            color: #12355b;
-
-            font-weight: bold;
-
-            font-size: 14px;
-
-            margin-bottom: 14px;
-        }
-
-
-        .filters {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 9px;
-        }
-
-
-        .filter {
-
-            text-decoration: none;
-
-            padding: 9px 15px;
-
-            border-radius: 5px;
-
-            border: 1px solid #d1d5db;
-
-            color: #475569;
-
-            background: white;
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-
-        .filter:hover {
-
-            border-color: #12355b;
-
-            color: #12355b;
-        }
-
-
-        .filter.active {
-
-            background: #12355b;
-
-            color: white;
-
-            border-color: #12355b;
-        }
-
-
-        /* =========================
-           TABLE
-        ========================= */
-
-        .table-card {
-
-            background: white;
-
-            border: 1px solid #dfe4ea;
-
-            border-radius: 8px;
-
-            overflow: hidden;
-        }
-
-
-        .table-header {
-
-            padding: 18px 20px;
-
-            border-bottom: 1px solid #e5e7eb;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-        }
-
-
-        .table-header h3 {
-
-            color: #12355b;
-
-            font-size: 16px;
-        }
-
-
-        .total {
-
-            color: #64748b;
-
-            font-size: 12px;
-        }
-
-
-        .table-wrapper {
-
-            overflow-x: auto;
-        }
-
-
-        table {
-
-            width: 100%;
-
-            min-width: 1200px;
-
-            border-collapse: collapse;
-        }
-
-
-        thead {
-
-            background: #12355b;
-
-            color: white;
-        }
-
-
-        th {
-
-            padding: 13px 12px;
-
-            text-align: left;
-
-            font-size: 12px;
-
-            white-space: nowrap;
-        }
-
-
-        td {
-
-            padding: 14px 12px;
-
-            border-bottom: 1px solid #e5e7eb;
-
-            font-size: 12px;
-
-            vertical-align: top;
-        }
-
-
-        tbody tr:hover {
-
-            background: #f8fafc;
-        }
-
-
-        .nama {
-
-            font-weight: bold;
-
-            color: #12355b;
-        }
-
-
-        .nip {
-
-            color: #475569;
-
-            font-size: 11px;
-
-            margin-top: 4px;
-        }
-
-
-        .small {
-
-            color: #6b7280;
-
-            font-size: 11px;
-
-            margin-top: 4px;
-        }
-
-
-        .unit {
-
-            max-width: 220px;
-
-            line-height: 1.5;
-
-            color: #344054;
-        }
-
-
-        .keperluan {
-
-            max-width: 220px;
-
-            line-height: 1.5;
-
-            color: #475569;
-        }
-
-
-        .waktu {
-
-            white-space: nowrap;
-
-            color: #475569;
-        }
-
-
-        /* =========================
-           STATUS
-        ========================= */
-
-        .status {
-
-            display: inline-block;
-
-            padding: 6px 10px;
-
-            border-radius: 20px;
-
-            font-size: 10px;
-
-            font-weight: bold;
-
-            text-transform: uppercase;
-
-            white-space: nowrap;
-        }
-
-
-        .menunggu {
-
-            background: #fff7ed;
-
-            color: #c2410c;
-        }
-
-
-        .disetujui {
-
-            background: #ecfdf5;
-
-            color: #047857;
-        }
-
-
-        .ditolak {
-
-            background: #fef2f2;
-
-            color: #b91c1c;
-        }
-
-
-        .dibatalkan {
-
-            background: #f3f4f6;
-
-            color: #4b5563;
-        }
-
-
-        /* =========================
-           BUTTON DETAIL
-        ========================= */
-
-        .btn-detail {
-
-            display: inline-block;
-
-            text-decoration: none;
-
-            background: #12355b;
-
-            color: white;
-
-            padding: 8px 12px;
-
-            border-radius: 5px;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            white-space: nowrap;
-        }
-
-
-        .btn-detail:hover {
-
-            background: #0d2946;
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================= */
-
-        .empty {
-
-            padding: 55px 20px;
-
-            text-align: center;
-
-            color: #6b7280;
-        }
-
-
-        .empty h3 {
-
-            color: #12355b;
-
-            margin-bottom: 8px;
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-
-                width: 190px;
-            }
-
-            .main {
-
-                margin-left: 190px;
-            }
-
-            .topbar {
-
-                padding: 0 20px;
-            }
-
-            .content {
-
-                padding: 20px;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================
-     SIDEBAR
-========================= -->
-
-<aside class="sidebar">
-
-    <div class="logo">
-
-        <h1>
-            SAPA
-        </h1>
-
-        <p>
-            Sistem Aplikasi Pemakai Aula
-        </p>
-
-    </div>
-
-
-    <nav class="menu">
-
-        <a href="{{ route('admin.dashboard') }}">
-            Dashboard
+        <a href="{{ route('admin.dashboard') }}" class="back-link">
+            ← Kembali ke Dashboard Admin
         </a>
 
+        <div class="history-header">
+            <div>
+                <span class="page-label">
+                    ADMINISTRATOR
+                </span>
 
-        <a
-            href="{{ route('admin.history') }}"
-            class="active"
-        >
-            Riwayat Pendaftaran
-        </a>
+                <h1>
+                    Data Pengajuan Pemakaian Aula
+                </h1>
 
+                <p>
+                    Lihat, filter, dan proses seluruh pengajuan pemakaian aula.
+                </p>
+            </div>
 
-        <a href="{{ route('admin.aulas') }}">
-            Data Aula
-        </a>
-
-    </nav>
-
-</aside>
-
-
-
-<!-- =========================
-     MAIN
-========================= -->
-
-<main class="main">
-
-
-    <!-- TOPBAR -->
-
-    <div class="topbar">
-
-        <h2>
-            Riwayat Pendaftaran
-        </h2>
-
-
-        <div class="admin-area">
-
-            <span>
-                {{ $user->name }}
-            </span>
-
-
-            <form
-                action="{{ route('logout') }}"
-                method="POST"
-            >
-
-                @csrf
-
-                <button
-                    type="submit"
-                    class="logout"
-                >
-                    Logout
-                </button>
-
-            </form>
-
+            <div class="history-icon">
+                📋
+            </div>
         </div>
 
     </div>
 
 
+    {{-- FILTER --}}
+    <div class="filter-card">
 
-    <!-- CONTENT -->
-
-    <div class="content">
-
-
-        <div class="page-title">
-
-            <h1>
-                Data Pengajuan Pemakaian Aula
-            </h1>
-
-            <p>
-                Lihat, filter, dan proses seluruh pengajuan
-                pemakaian aula.
-            </p>
-
-        </div>
-
-
-
-        <!-- ALERT -->
-
-        @if(session('success'))
-
-            <div class="alert success">
-                {{ session('success') }}
-            </div>
-
-        @endif
-
-
-        @if(session('error'))
-
-            <div class="alert error">
-                {{ session('error') }}
-            </div>
-
-        @endif
-
-
-
-        <!-- =========================
-             FILTER
-        ========================= -->
-
-        <div class="filter-card">
+        <div class="filter-heading">
 
             <div class="filter-title">
                 Filter Status Pengajuan
             </div>
 
-
-            <div class="filters">
-
-                <a
-                    href="{{ route('admin.history') }}"
-                    class="filter
-                    {{ $statusAktif == 'semua' ? 'active' : '' }}"
-                >
-                    Semua
-                </a>
-
-
-                <a
-                    href="{{ route('admin.history', ['status' => 'menunggu']) }}"
-                    class="filter
-                    {{ $statusAktif == 'menunggu' ? 'active' : '' }}"
-                >
-                    Menunggu
-                </a>
-
-
-                <a
-                    href="{{ route('admin.history', ['status' => 'disetujui']) }}"
-                    class="filter
-                    {{ $statusAktif == 'disetujui' ? 'active' : '' }}"
-                >
-                    Disetujui
-                </a>
-
-
-                <a
-                    href="{{ route('admin.history', ['status' => 'ditolak']) }}"
-                    class="filter
-                    {{ $statusAktif == 'ditolak' ? 'active' : '' }}"
-                >
-                    Ditolak
-                </a>
-
-
-                <a
-                    href="{{ route('admin.history', ['status' => 'dibatalkan']) }}"
-                    class="filter
-                    {{ $statusAktif == 'dibatalkan' ? 'active' : '' }}"
-                >
-                    Dibatalkan
-                </a>
-
-            </div>
+            <span class="filter-description">
+                Pilih status untuk menampilkan data tertentu.
+            </span>
 
         </div>
 
-
-
-        <!-- =========================
-             TABLE
-        ========================= -->
-
-        <div class="table-card">
-
-
-            <div class="table-header">
-
-                <h3>
-                    Daftar Pengajuan
-                </h3>
-
-
-                <span class="total">
-
-                    {{ $pendaftarans->count() }}
-
-                    pengajuan
-
-                </span>
-
-            </div>
-
-
-
-            @if($pendaftarans->count() > 0)
-
-
-                <div class="table-wrapper">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    No
-                                </th>
-
-                                <th>
-                                    Pemohon
-                                </th>
-
-                                <th>
-                                    Unit Organisasi
-                                </th>
-
-                                <th>
-                                    Aula
-                                </th>
-
-                                <th>
-                                    Tanggal
-                                </th>
-
-                                <th>
-                                    Waktu
-                                </th>
-
-                                <th>
-                                    Peserta
-                                </th>
-
-                                <th>
-                                    Pihak Luar
-                                </th>
-
-                                <th>
-                                    Keperluan
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                                <th>
-                                    Aksi
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody>
-
-
-                            @foreach(
-                                $pendaftarans
-                                as $index => $pendaftaran
-                            )
-
-                                <tr>
-
-
-                                    <!-- NO -->
-
-                                    <td>
-                                        {{ $index + 1 }}
-                                    </td>
-
-
-                                    <!-- PEMOHON -->
-
-                                    <td>
-
-                                        <div class="nama">
-
-                                            {{ $pendaftaran->nama_pemohon }}
-
-                                        </div>
-
-
-                                        <div class="nip">
-
-                                            NIP:
-                                            {{ $pendaftaran->nip ?? '-' }}
-
-                                        </div>
-
-
-                                        <div class="small">
-
-                                            {{ $pendaftaran->jabatan ?? '-' }}
-
-                                        </div>
-
-
-                                        <div class="small">
-
-                                            {{ $pendaftaran->email }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- UNIT ORGANISASI -->
-
-                                    <td>
-
-                                        <div class="unit">
-
-                                            {{ $pendaftaran->unit_organisasi ?? '-' }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- AULA -->
-
-                                    <td>
-
-                                        <strong>
-
-                                            {{ $pendaftaran->aula->nama_aula ?? '-' }}
-
-                                        </strong>
-
-
-                                        <div class="small">
-
-                                            Kapasitas:
-                                            {{ $pendaftaran->aula->kapasitas ?? '-' }}
-
-                                            orang
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- TANGGAL -->
-
-                                    <td>
-
-                                        <strong>
-
-                                            {{ \Carbon\Carbon::parse(
-                                                $pendaftaran->tanggal
-                                            )->locale('id')->translatedFormat('d F Y') }}
-
-                                        </strong>
-
-
-                                        <div class="small">
-
-                                            {{ \Carbon\Carbon::parse(
-                                                $pendaftaran->tanggal
-                                            )->locale('id')->translatedFormat('l') }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- WAKTU -->
-
-                                    <td>
-
-                                        <div class="waktu">
-
-                                            {{ \Carbon\Carbon::parse(
-                                                $pendaftaran->jam_mulai
-                                            )->format('H:i') }}
-
-                                            -
-
-                                            {{ \Carbon\Carbon::parse(
-                                                $pendaftaran->jam_selesai
-                                            )->format('H:i') }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- PESERTA -->
-
-                                    <td>
-
-                                        {{ $pendaftaran->jumlah_peserta }}
-
-                                        orang
-
-                                    </td>
-
-
-                                    <!-- PIHAK LUAR -->
-
-                                    <td>
-
-                                        @if(
-                                            $pendaftaran->peserta_pihak_luar
-                                            === 'ada'
-                                        )
-
-                                            <span class="status menunggu">
-                                                Ada
-                                            </span>
-
-                                        @else
-
-                                            <span class="status dibatalkan">
-                                                Tidak Ada
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    <!-- KEPERLUAN -->
-
-                                    <td>
-
-                                        <div class="keperluan">
-
-                                            {{ $pendaftaran->keperluan }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- STATUS -->
-
-                                    <td>
-
-                                        <span
-                                            class="status
-                                            {{ $pendaftaran->status }}"
-                                        >
-
-                                            {{ ucfirst(
-                                                $pendaftaran->status
-                                            ) }}
-
-                                        </span>
-
-                                    </td>
-
-
-                                    <!-- DETAIL -->
-
-                                    <td>
-
-                                        <a
-                                            href="{{
-                                                route(
-                                                    'admin.pendaftaran.show',
-                                                    $pendaftaran->id
-                                                )
-                                            }}"
-                                            class="btn-detail"
-                                        >
-
-                                            DETAIL
-
-                                        </a>
-
-                                    </td>
-
-
-                                </tr>
-
-
-                            @endforeach
-
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-
-            @else
-
-
-                <div class="empty">
-
-                    <h3>
-                        Tidak Ada Pengajuan
-                    </h3>
-
-                    <p>
-                        Belum ada data pada filter yang dipilih.
-                    </p>
-
-                </div>
-
-
-            @endif
-
+        <div class="filter-buttons">
+
+            <a
+                href="{{ route('admin.history') }}"
+                class="filter-btn {{ $statusAktif === 'semua' ? 'active' : '' }}"
+            >
+                Semua
+            </a>
+
+            <a
+                href="{{ route('admin.history', ['status' => 'menunggu']) }}"
+                class="filter-btn {{ $statusAktif === 'menunggu' ? 'active' : '' }}"
+            >
+                <span class="dot yellow"></span>
+                Menunggu
+            </a>
+
+            <a
+                href="{{ route('admin.history', ['status' => 'disetujui']) }}"
+                class="filter-btn {{ $statusAktif === 'disetujui' ? 'active' : '' }}"
+            >
+                <span class="dot green"></span>
+                Disetujui
+            </a>
+
+            <a
+                href="{{ route('admin.history', ['status' => 'ditolak']) }}"
+                class="filter-btn {{ $statusAktif === 'ditolak' ? 'active' : '' }}"
+            >
+                <span class="dot red"></span>
+                Ditolak
+            </a>
+
+            <a
+                href="{{ route('admin.history', ['status' => 'dibatalkan']) }}"
+                class="filter-btn {{ $statusAktif === 'dibatalkan' ? 'active' : '' }}"
+            >
+                <span class="dot gray"></span>
+                Dibatalkan
+            </a>
 
         </div>
-
 
     </div>
 
 
-</main>
+    {{-- DATA --}}
+    <div class="data-card">
+
+        <div class="card-header">
+
+            <div>
+                <div class="card-label">
+                    DATA PENDAFTARAN
+                </div>
+
+                <h2>
+                    Daftar Pengajuan
+                </h2>
+
+                <p>
+                    Seluruh pengajuan pemakaian aula yang masuk ke sistem.
+                </p>
+            </div>
+
+            <div class="total-badge">
+                {{ $pendaftarans->count() }} Pengajuan
+            </div>
+
+        </div>
 
 
-</body>
+        <div class="table-wrapper">
 
-</html>
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Pemohon</th>
+                        <th>Unit Organisasi</th>
+                        <th>Aula</th>
+                        <th>Tanggal</th>
+                        <th>Waktu</th>
+                        <th>Peserta</th>
+                        <th>Keperluan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    @forelse($pendaftarans as $index => $pendaftaran)
+
+                        <tr>
+
+                            {{-- NO --}}
+                            <td>
+                                <span class="number-cell">
+                                    {{ $index + 1 }}
+                                </span>
+                            </td>
+
+
+                            {{-- PEMOHON --}}
+                            <td>
+
+                                <div class="applicant">
+
+                                    <strong>
+                                        {{ $pendaftaran->nama_pemohon }}
+                                    </strong>
+
+                                    <span>
+                                        NIP: {{ $pendaftaran->nip }}
+                                    </span>
+
+                                    <span>
+                                        {{ $pendaftaran->jabatan }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            {{-- UNIT ORGANISASI --}}
+                            <td>
+
+                                @if($pendaftaran->unit_organisasi)
+
+                                    <span class="unit">
+                                        {{ $pendaftaran->unit_organisasi }}
+                                    </span>
+
+                                    @if($pendaftaran->bagian_seksi)
+
+                                        <small class="section">
+                                            {{ $pendaftaran->bagian_seksi }}
+                                        </small>
+
+                                    @endif
+
+                                @else
+
+                                    <span class="unit external-unit">
+                                        {{ $pendaftaran->instansi ?? 'Eksternal' }}
+                                    </span>
+
+                                    <small class="section">
+                                        Pemohon Eksternal
+                                    </small>
+
+                                @endif
+
+                            </td>
+
+
+                            {{-- AULA --}}
+                            <td>
+
+                                <strong class="aula-name">
+                                    {{ $pendaftaran->aula->nama_aula ?? '-' }}
+                                </strong>
+
+                                @if($pendaftaran->aula)
+
+                                    <small class="capacity">
+                                        Kapasitas:
+                                        {{ $pendaftaran->aula->kapasitas }}
+                                        orang
+                                    </small>
+
+                                @endif
+
+                            </td>
+
+
+                            {{-- TANGGAL --}}
+                            <td>
+
+                                <div class="date-cell">
+
+                                    <strong>
+                                        {{ \Carbon\Carbon::parse($pendaftaran->tanggal_mulai)->translatedFormat('d F Y') }}
+                                    </strong>
+
+                                    <span>
+                                        {{ \Carbon\Carbon::parse($pendaftaran->tanggal_mulai)->translatedFormat('l') }}
+                                    </span>
+
+                                    @if($pendaftaran->tanggal_mulai != $pendaftaran->tanggal_selesai)
+
+                                        <small>
+                                            s/d
+                                            {{ \Carbon\Carbon::parse($pendaftaran->tanggal_selesai)->translatedFormat('d F Y') }}
+                                        </small>
+
+                                    @endif
+
+                                </div>
+
+                            </td>
+
+
+                            {{-- WAKTU --}}
+                            <td>
+
+                                <div class="time-cell">
+
+                                    @switch($pendaftaran->kriteria_waktu)
+
+                                        @case('pagi')
+                                            <span class="time-badge pagi">
+                                                Pagi
+                                            </span>
+                                            @break
+
+                                        @case('siang')
+                                            <span class="time-badge siang">
+                                                Siang
+                                            </span>
+                                            @break
+
+                                        @case('sore')
+                                            <span class="time-badge sore">
+                                                Sore
+                                            </span>
+                                            @break
+
+                                        @case('malam')
+                                            <span class="time-badge malam">
+                                                Malam
+                                            </span>
+                                            @break
+
+                                        @default
+                                            <span class="time-badge">
+                                                -
+                                            </span>
+
+                                    @endswitch
+
+                                </div>
+
+                            </td>
+
+
+                            {{-- PESERTA --}}
+                            <td>
+
+                                <div class="participant-cell">
+
+                                    <strong>
+                                        {{ $pendaftaran->jumlah_peserta }}
+                                    </strong>
+
+                                    <small>
+                                        orang
+                                    </small>
+
+                                </div>
+
+                            </td>
+
+
+                            {{-- KEPERLUAN --}}
+                            <td class="purpose">
+
+                                <div class="purpose-text">
+                                    {{ $pendaftaran->keperluan }}
+                                </div>
+
+                            </td>
+
+
+                            {{-- STATUS --}}
+                            <td>
+
+                                @if($pendaftaran->status === 'disetujui')
+
+                                    <span class="badge badge-success">
+                                        ✓ DISETUJUI
+                                    </span>
+
+                                @elseif($pendaftaran->status === 'ditolak')
+
+                                    <span class="badge badge-danger">
+                                        × DITOLAK
+                                    </span>
+
+                                @elseif($pendaftaran->status === 'dibatalkan')
+
+                                    <span class="badge badge-danger">
+                                        × DIBATALKAN
+                                    </span>
+
+                                @else
+
+                                    <span class="badge badge-warning">
+                                        ⏳ MENUNGGU
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+
+                            {{-- AKSI --}}
+                            <td>
+
+                                <a
+                                    href="{{ route('admin.pendaftaran.show', $pendaftaran) }}"
+                                    class="detail-btn"
+                                >
+                                    Detail
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td colspan="10">
+
+                                <div class="empty">
+
+                                    <div class="empty-icon">
+                                        📋
+                                    </div>
+
+                                    <h3>
+                                        Tidak Ada Pengajuan
+                                    </h3>
+
+                                    <p>
+                                        Belum ada pengajuan dengan status yang dipilih.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* =========================
+   CONTAINER
+========================= */
+
+.admin-history {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.page-top {
+    margin-bottom: 22px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 18px;
+    color: #12355b;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: .2s ease;
+}
+
+.back-link:hover {
+    color: #2563eb;
+    transform: translateX(-2px);
+}
+
+.history-header {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 25px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.page-label {
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.page-top h1 {
+    color: #12355b;
+    font-size: 25px;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+.page-top p {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.history-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eff6ff;
+    font-size: 23px;
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+
+.filter-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.filter-title {
+    color: #12355b;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.filter-description {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+.filter-btn:hover {
+    border-color: #12355b;
+    color: #12355b;
+    background: #f8fafc;
+}
+
+.filter-btn.active {
+    background: #12355b;
+    border-color: #12355b;
+    color: white;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.yellow {
+    background: #f59e0b;
+}
+
+.dot.green {
+    background: #22c55e;
+}
+
+.dot.red {
+    background: #ef4444;
+}
+
+.dot.gray {
+    background: #94a3b8;
+}
+
+
+/* =========================
+   DATA CARD
+========================= */
+
+.data-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+.card-header {
+    padding: 19px 21px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.card-label {
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    margin-bottom: 4px;
+}
+
+.card-header h2 {
+    color: #12355b;
+    font-size: 16px;
+    margin: 0;
+}
+
+.card-header p {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.total-badge {
+    background: #eff6ff;
+    color: #12355b;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1150px;
+}
+
+th {
+    background: #12355b;
+    color: white;
+    padding: 13px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #334155;
+    font-size: 11px;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+tbody tr {
+    transition: background .15s ease;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+.number-cell {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   PEMOHON
+========================= */
+
+.applicant strong {
+    display: block;
+    color: #12355b;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.applicant span {
+    display: block;
+    color: #64748b;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   UNIT
+========================= */
+
+.unit {
+    display: block;
+    color: #334155;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.external-unit {
+    color: #475569;
+}
+
+.section {
+    display: block;
+    color: #64748b;
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   AULA
+========================= */
+
+.aula-name {
+    display: block;
+    color: #12355b;
+    font-size: 12px;
+}
+
+.capacity {
+    display: block;
+    color: #64748b;
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+
+/* =========================
+   TANGGAL
+========================= */
+
+.date-cell strong {
+    display: block;
+    color: #12355b;
+}
+
+.date-cell span {
+    display: block;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.date-cell small {
+    display: block;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+
+/* =========================
+   WAKTU
+========================= */
+
+.time-cell {
+    white-space: nowrap;
+}
+
+.time-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.time-badge.pagi {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.time-badge.siang {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.time-badge.sore {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.time-badge.malam {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+
+/* =========================
+   PESERTA
+========================= */
+
+.participant-cell strong {
+    color: #12355b;
+    font-size: 13px;
+}
+
+.participant-cell small {
+    color: #64748b;
+    font-size: 10px;
+}
+
+
+/* =========================
+   KEPERLUAN
+========================= */
+
+.purpose {
+    max-width: 180px;
+}
+
+.purpose-text {
+    line-height: 1.55;
+    color: #475569;
+}
+
+
+/* =========================
+   BADGE
+========================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.badge-success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge-warning {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.badge-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+/* =========================
+   DETAIL BUTTON
+========================= */
+
+.detail-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    color: #12355b;
+    font-size: 10px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: .2s ease;
+}
+
+.detail-btn:hover {
+    background: #12355b;
+    border-color: #12355b;
+    color: white;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty {
+    padding: 60px 30px;
+    text-align: center;
+}
+
+.empty-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 12px;
+    border-radius: 15px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.empty h3 {
+    color: #12355b;
+    font-size: 16px;
+    margin: 0;
+}
+
+.empty p {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .admin-history {
+        width: 100%;
+    }
+
+    .history-header {
+        padding: 22px;
+        border-radius: 15px;
+    }
+
+    .page-top h1 {
+        font-size: 22px;
+    }
+
+    .history-icon {
+        display: none;
+    }
+
+    .filter-heading {
+        display: block;
+    }
+
+    .filter-description {
+        display: block;
+        margin-top: 4px;
+    }
+
+    .card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .total-badge {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .filter-card {
+        padding: 16px;
+    }
+
+    .filter-btn {
+        font-size: 10px;
+        padding: 8px 10px;
+    }
+
+    .history-header {
+        padding: 20px;
+    }
+
+    .page-top h1 {
+        font-size: 20px;
+    }
+}
+
+</style>
+
+@endsection

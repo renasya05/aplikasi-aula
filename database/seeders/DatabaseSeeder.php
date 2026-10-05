@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Aula;
 use App\Models\User;
+use App\Models\Aula;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,51 +11,51 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // =========================
-        // ADMIN
-        // =========================
+        /*
+        |--------------------------------------------------------------------------
+        | AKUN ADMIN
+        |--------------------------------------------------------------------------
+        */
 
         User::updateOrCreate(
-            ['email' => 'admin@aula.test'],
+            [
+                'email' => env('ADMIN_EMAIL', 'admin@aula.test'),
+            ],
             [
                 'name' => 'Administrator',
-                'password' => Hash::make('password'),
+                'password' => Hash::make(
+                    env('ADMIN_PASSWORD', 'password')
+                ),
                 'role' => 'admin',
             ]
         );
 
-        // =========================
-        // USER / PEMOHON
-        // =========================
 
-        User::updateOrCreate(
-            ['email' => 'user@aula.test'],
-            [
-                'name' => 'User Demo',
-                'password' => Hash::make('password'),
-                'role' => 'user',
-            ]
-        );
-
-        // =========================
-        // AULA
-        // =========================
+        /*
+        |--------------------------------------------------------------------------
+        | DATA AULA
+        |--------------------------------------------------------------------------
+        */
 
         Aula::updateOrCreate(
-            ['nama_aula' => 'Aula Besar'],
+            [
+                'nama_aula' => 'Aula Besar',
+            ],
             [
                 'kapasitas' => 100,
-                'keterangan' => 'Aula berkapasitas besar untuk kegiatan, rapat, seminar, dan acara lainnya.',
-                'fasilitas' => 'AC, Kursi, Meja, Proyektor, Sound System',
+                'keterangan' => 'Aula dengan kapasitas besar untuk kegiatan dan acara kantor.',
+                'fasilitas' => 'Kursi, meja, sound system, proyektor',
             ]
         );
 
         Aula::updateOrCreate(
-            ['nama_aula' => 'Aula Kecil'],
+            [
+                'nama_aula' => 'Aula Kecil',
+            ],
             [
                 'kapasitas' => 30,
-                'keterangan' => 'Aula berukuran kecil untuk rapat dan kegiatan dengan jumlah peserta terbatas.',
-                'fasilitas' => 'AC, Kursi, Meja, Proyektor',
+                'keterangan' => 'Aula dengan kapasitas kecil untuk rapat dan kegiatan internal.',
+                'fasilitas' => 'Kursi, meja, AC',
             ]
         );
     }

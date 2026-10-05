@@ -1,491 +1,693 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Form Pemakaian Aula | SAPA</title>
+    <title>Pendaftaran Aula | SAPA</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+   <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f9;
-            color: #263238;
-        }
+    html {
+        scroll-behavior: smooth;
+    }
 
-        /* =========================
-           NAVBAR
-        ========================= */
-        .navbar {
-            height: 70px;
-            background: #12355b;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 45px;
-        }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #12355b;
+        color: #1f2937;
+        min-height: 100vh;
+        line-height: 1.6;
+        padding-bottom: 45px;
+    }
 
-        .brand {
-            display: flex;
-            flex-direction: column;
-        }
+    /* =========================
+       HEADER
+    ========================== */
 
-        .brand-title {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+    .header {
+        background: transparent;
+        color: white;
+        padding: 30px 5% 20px;
+    }
 
-        .brand-subtitle {
-            font-size: 12px;
-            margin-top: 3px;
-            opacity: 0.85;
-        }
+    .header-inner {
+        width: 94%;
+        max-width: 1240px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
 
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+    .header-brand {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .user-name {
-            font-size: 14px;
-        }
+    .header h1 {
+        font-size: 32px;
+        margin-bottom: 3px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
 
-        .logout-btn {
-            background: white;
-            color: #12355b;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+    .header p {
+        font-size: 17px;
+        opacity: 0.92;
+    }
 
-        .logout-btn:hover {
-            background: #e9eef4;
-        }
+    /* =========================
+       CONTAINER
+    ========================== */
 
-        /* =========================
-           CONTAINER
-        ========================= */
-        .container {
-            max-width: 1000px;
-            margin: 35px auto;
-            padding: 0 20px;
-        }
+    .container {
+        width: 94%;
+        max-width: 1240px;
+        margin: 8px auto 0;
+    }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 18px;
-            text-decoration: none;
-            color: #12355b;
-            font-weight: 600;
-            font-size: 14px;
-        }
+    .card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 38px 42px 42px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+    /* =========================
+       TOMBOL KEMBALI
+    ========================== */
 
-        .page-header {
-            margin-bottom: 25px;
-        }
+    .top-action {
+        margin-bottom: 24px;
+    }
 
-        .page-header h1 {
-            font-size: 28px;
-            color: #12355b;
-            margin-bottom: 7px;
-        }
+    .btn-back-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 9px 16px;
+        background: #e8edf3;
+        color: #334155;
+        border: 1px solid #d5dde7;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
 
-        .page-header p {
-            color: #667085;
-            font-size: 14px;
-        }
+    .btn-back-top:hover {
+        background: #dce4ed;
+        color: #12355b;
+        transform: translateY(-1px);
+    }
 
-        /* =========================
-           FORM CARD
-        ========================= */
-        .form-card {
-            background: white;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.07);
-        }
+    /* =========================
+       INFO AULA
+    ========================== */
 
-        .section {
-            margin-bottom: 30px;
-        }
+    .aula-info {
+        background: #f1f6fa;
+        border: 1px solid #d9e4ee;
+        border-left: 6px solid #12355b;
+        padding: 21px 23px;
+        border-radius: 10px;
+        margin-bottom: 34px;
+    }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #12355b;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-        }
+    .aula-info .label {
+        display: block;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
 
-        .section-title span {
-            display: inline-block;
-            margin-right: 8px;
-        }
+    .aula-info h2 {
+        color: #12355b;
+        font-size: 25px;
+        font-weight: 800;
+    }
 
-        /* =========================
-           FORM GRID
-        ========================= */
-        .row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 18px;
-        }
+    /* =========================
+       ALERT
+    ========================== */
 
-        .row.single {
+    .alert {
+        padding: 16px 18px;
+        border-radius: 10px;
+        margin-bottom: 26px;
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .alert-danger strong {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .alert-danger ul {
+        padding-left: 22px;
+    }
+
+    /* =========================
+       SECTION
+    ========================== */
+
+    .section {
+        margin-bottom: 36px;
+        padding-bottom: 34px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 5px;
+    }
+
+    .section-title {
+        color: #12355b;
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 23px;
+        padding-left: 13px;
+        border-left: 5px solid #12355b;
+        line-height: 1.35;
+    }
+
+    /* =========================
+       FORM
+    ========================== */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 23px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    label {
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 9px;
+        color: #334155;
+    }
+
+    .required {
+        color: #dc2626;
+        margin-left: 2px;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 9px;
+        font-size: 17px;
+        font-family: inherit;
+        background: #ffffff;
+        color: #1f2937;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    input,
+    select {
+        min-height: 52px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #94a3b8;
+    }
+
+    input:hover,
+    select:hover,
+    textarea:hover {
+        border-color: #94a3b8;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #12355b;
+        box-shadow: 0 0 0 3px rgba(18, 53, 91, 0.11);
+    }
+
+    textarea {
+        min-height: 145px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .hint {
+        margin-top: 7px;
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.5;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* =========================
+       PESERTA RAPAT
+    ========================== */
+
+    .radio-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .radio-card {
+        position: relative;
+    }
+
+    .radio-card input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .radio-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 62px;
+        padding: 14px 16px;
+        text-align: center;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #ffffff;
+        color: #334155;
+        font-size: 16px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        margin: 0;
+    }
+
+    .radio-label:hover {
+        border-color: #12355b;
+        background: #f5f8fb;
+    }
+
+    .radio-card input:checked + .radio-label {
+        border: 2px solid #12355b;
+        background: #eef4f8;
+        color: #12355b;
+        box-shadow: 0 3px 10px rgba(18, 53, 91, 0.08);
+    }
+
+    /* =========================
+       HARI
+    ========================== */
+
+    .hari-display {
+        margin-top: 8px;
+        padding: 9px 13px;
+        min-height: 40px;
+        background: #eef4f8;
+        border-left: 4px solid #12355b;
+        border-radius: 6px;
+        color: #12355b;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .hari-display.empty {
+        color: #64748b;
+        font-weight: 400;
+    }
+
+    /* =========================
+       WAKTU
+    ========================== */
+
+    .waktu-container {
+        margin-top: 25px;
+    }
+
+    .waktu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 17px;
+        margin-top: 13px;
+    }
+
+    .waktu-card {
+        position: relative;
+    }
+
+    .waktu-card input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .waktu-label {
+        min-height: 132px;
+        padding: 20px;
+        border: 1px solid #cbd5e1;
+        border-radius: 11px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0;
+    }
+
+    .waktu-label:hover {
+        border-color: #12355b;
+        background: #f7f9fb;
+        transform: translateY(-1px);
+    }
+
+    .waktu-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef4f8;
+        border-radius: 50%;
+        font-size: 23px;
+        flex-shrink: 0;
+    }
+
+    .waktu-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .waktu-content strong {
+        color: #12355b;
+        font-size: 17px;
+    }
+
+    .waktu-content span {
+        color: #475569;
+        font-size: 15px;
+    }
+
+    .waktu-card input:checked + .waktu-label {
+        border: 2px solid #12355b;
+        background: #eef4f8;
+        box-shadow: 0 4px 12px rgba(18, 53, 91, 0.08);
+    }
+
+    .waktu-card input:checked + .waktu-label .waktu-icon {
+        background: #dbe7f2;
+    }
+
+    /* =========================
+       WAKTU SUDAH DIGUNAKAN
+    ========================== */
+
+    .waktu-card.disabled .waktu-label {
+        background: #e5e7eb;
+        border-color: #d1d5db;
+        cursor: not-allowed;
+        opacity: 0.65;
+        transform: none;
+    }
+
+    .waktu-card.disabled .waktu-icon {
+        background: #d1d5db;
+    }
+
+    .waktu-card.disabled .waktu-content strong,
+    .waktu-card.disabled .waktu-content span {
+        color: #9ca3af;
+    }
+
+    .waktu-card.disabled::after {
+        content: "Sudah digunakan";
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: #d1d5db;
+        color: #6b7280;
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* =========================
+       BUTTON SUBMIT
+    ========================== */
+
+    .button-area {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 28px;
+        padding-top: 25px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 13px 28px;
+        border: none;
+        border-radius: 9px;
+        background: #12355b;
+        color: #ffffff;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 10px rgba(18, 53, 91, 0.18);
+    }
+
+    .btn-submit:hover {
+        background: #0d2947;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(18, 53, 91, 0.23);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media (max-width: 900px) {
+
+        .form-grid {
             grid-template-columns: 1fr;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
+        .radio-group,
+        .waktu-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card {
+            padding: 30px;
+        }
+
+        .header-inner {
+            width: 94%;
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        body {
+            padding-bottom: 25px;
+        }
+
+        .header {
+            padding: 22px 4% 17px;
+        }
+
+        .header-inner {
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .header h1 {
+            font-size: 27px;
+        }
+
+        .header p {
+            font-size: 15px;
+        }
+
+        .container {
+            width: 94%;
+            margin-top: 5px;
+        }
+
+        .card {
+            padding: 22px 18px 28px;
+            border-radius: 13px;
+        }
+
+        .aula-info {
+            padding: 17px 18px;
+        }
+
+        .aula-info h2 {
+            font-size: 21px;
+        }
+
+        .section-title {
+            font-size: 20px;
         }
 
         label {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #344054;
-        }
-
-        .required {
-            color: #c62828;
+            font-size: 16px;
         }
 
         input,
         select,
         textarea {
+            font-size: 16px;
+        }
+
+        .btn-back-top {
+            min-height: 40px;
+            padding: 8px 14px;
+            font-size: 14px;
+        }
+
+        .button-area {
+            justify-content: stretch;
+        }
+
+        .btn-submit {
             width: 100%;
-            padding: 12px 13px;
-            border: 1px solid #d0d5dd;
-            border-radius: 7px;
-            font-size: 14px;
-            font-family: inherit;
-            color: #344054;
-            background: white;
-            outline: none;
-            transition: 0.2s;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #12355b;
-            box-shadow: 0 0 0 3px rgba(18, 53, 91, 0.10);
+        .waktu-label {
+            min-height: 110px;
         }
-
-        input[readonly] {
-            background: #f2f4f7;
-            color: #667085;
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        /* =========================
-           INFO AULA
-        ========================= */
-        .aula-info {
-            background: #eef4fa;
-            border-left: 4px solid #12355b;
-            padding: 17px 18px;
-            border-radius: 7px;
-            margin-bottom: 25px;
-        }
-
-        .aula-info strong {
-            display: block;
-            color: #12355b;
-            font-size: 17px;
-            margin-bottom: 5px;
-        }
-
-        .aula-info p {
-            color: #667085;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-
-        .capacity-info {
-            font-weight: 600;
-            color: #12355b !important;
-        }
-
-        /* =========================
-           RADIO
-        ========================= */
-        .radio-group {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            padding-top: 5px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #344054;
-        }
-
-        .radio-option input {
-            width: auto;
-            margin: 0;
-            accent-color: #12355b;
-        }
-
-        /* =========================
-           ERROR
-        ========================= */
-        .error-box {
-            background: #fff1f1;
-            border: 1px solid #f3b5b5;
-            color: #a61b1b;
-            border-radius: 7px;
-            padding: 14px 16px;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-
-        .error-box ul {
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-
-        .error-text {
-            color: #c62828;
-            font-size: 12px;
-            margin-top: 6px;
-        }
-
-        /* =========================
-           TOTAL PESERTA
-        ========================= */
-        .participant-info {
-            margin-top: 8px;
-            background: #f8fafc;
-            border: 1px solid #e4e7ec;
-            border-radius: 7px;
-            padding: 13px 15px;
-            font-size: 14px;
-        }
-
-        .participant-info strong {
-            color: #12355b;
-        }
-
-        /* =========================
-           BUTTON
-        ========================= */
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #eaecf0;
-        }
-
-        .btn {
-            padding: 12px 22px;
-            border-radius: 7px;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-secondary {
-            background: #eaecf0;
-            color: #344054;
-        }
-
-        .btn-secondary:hover {
-            background: #dfe3e8;
-        }
-
-        .btn-primary {
-            background: #12355b;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #0d2947;
-        }
-
-        .btn-primary:disabled {
-            background: #98a2b3;
-            cursor: not-allowed;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-        @media (max-width: 700px) {
-
-            .navbar {
-                padding: 0 20px;
-            }
-
-            .brand-subtitle {
-                display: none;
-            }
-
-            .user-name {
-                display: none;
-            }
-
-            .form-card {
-                padding: 22px;
-            }
-
-            .row {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .page-header h1 {
-                font-size: 24px;
-            }
-
-            .form-actions {
-                flex-direction: column-reverse;
-            }
-
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            .radio-group {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-        }
-    </style>
-</head>
+    }
+</style>
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    {{-- ==========================================================
+        HEADER
+    =========================================================== --}}
 
-        <div class="brand">
-            <div class="brand-title">
-                SAPA
-            </div>
+    <header class="header">
 
-            <div class="brand-subtitle">
-                Sistem Aplikasi Pemakai Aula
-            </div>
-        </div>
+        <div class="header-inner">
 
-        <div class="user-area">
-
-            <div class="user-name">
-                {{ $user->name }}
-            </div>
-
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-
-                <button type="submit" class="logout-btn">
-                    Keluar
-                </button>
-            </form>
-
-        </div>
-
-    </nav>
-
-
-    <!-- CONTENT -->
-    <main class="container">
-
-        <a href="{{ route('aulas') }}" class="back-link">
-            ← Kembali ke Daftar Aula
-        </a>
-
-
-        <div class="page-header">
-
-            <h1>
-                Form Pemakaian Aula
-            </h1>
+            <h1>SAPA</h1>
 
             <p>
-                Silakan lengkapi data pemakaian aula dengan benar.
+                Sistem Aplikasi Pemanfaatan Aula
             </p>
 
         </div>
 
+    </header>
 
-        <!-- ERROR -->
-        @if ($errors->any())
 
-            <div class="error-box">
+    <main class="container">
 
-                <strong>
-                    Terdapat kesalahan pada pengisian formulir:
-                </strong>
+        <div class="card">
 
-                <ul>
-                    @foreach ($errors->all() as $error)
+            {{-- ======================================================
+                TOMBOL KEMBALI
+            ======================================================= --}}
 
-                        <li>
-                            {{ $error }}
-                        </li>
+            <div class="top-action">
 
-                    @endforeach
-                </ul>
+                <a
+                    href="{{ route('aulas') }}"
+                    class="btn-back-top"
+                >
+                    ← Kembali ke Daftar Aula
+                </a>
 
             </div>
 
-        @endif
 
+            {{-- ======================================================
+                INFO AULA
+            ======================================================= --}}
 
-        <div class="form-card">
-
-
-            <!-- INFO AULA -->
             <div class="aula-info">
 
-                <strong>
+                <span class="label">
+                    Aula yang Dipilih
+                </span>
+
+                <h2>
                     {{ $aula->nama_aula }}
-                </strong>
-
-                <p>
-                    {{ $aula->keterangan }}
-                </p>
-
-                <p class="capacity-info">
-                    Kapasitas maksimal:
-                    {{ $aula->kapasitas }} orang
-                </p>
+                </h2>
 
             </div>
+
+
+            {{-- ======================================================
+                ERROR
+            ======================================================= --}}
+
+            @if ($errors->any())
+
+                <div class="alert alert-danger">
+
+                    <strong>
+                        Terjadi kesalahan:
+                    </strong>
+
+                    <ul>
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>
+                                {{ $error }}
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
 
 
             <form
@@ -496,7 +698,7 @@
 
                 @csrf
 
-                <!-- AULA -->
+
                 <input
                     type="hidden"
                     name="aula_id"
@@ -504,495 +706,662 @@
                 >
 
 
-                <!-- =========================
-                     DATA PEMOHON
-                ========================== -->
+                {{-- ======================================================
+                    1. DATA PEMOHON
+                ======================================================= --}}
 
-                <div class="section">
+                <section class="section">
 
-                    <div class="section-title">
-                        Data Pemohon
-                    </div>
-
-
-                    <!-- EMAIL -->
-
-                    <div class="row single">
-
-                        <div class="form-group">
-
-                            <label for="email">
-                                Email
-                                <span class="required">*</span>
-                            </label>
-
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value="{{ old('email', $user->email) }}"
-                                required
-                            >
-
-                            @error('email')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
-
-                    </div>
+                    <h2 class="section-title">
+                        1. Data Pemohon
+                    </h2>
 
 
-                    <!-- NAMA + NIP -->
+                    <div class="form-grid">
 
-                    <div class="row">
+                        {{-- NAMA LENGKAP --}}
 
                         <div class="form-group">
 
-                            <label for="nama_pemohon">
-                                Nama
-                                <span class="required">*</span>
+                            <label>
+
+                                Nama Lengkap Pemohon
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
+
 
                             <input
                                 type="text"
-                                id="nama_pemohon"
                                 name="nama_pemohon"
-                                value="{{ old('nama_pemohon', $user->name) }}"
-                                placeholder="Masukkan nama pemohon"
+                                value="{{ old('nama_pemohon', $user->name ?? '') }}"
+                                placeholder="Masukkan nama lengkap pemohon"
                                 required
                             >
-
-                            @error('nama_pemohon')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
 
                         </div>
 
 
+                        {{-- NIP --}}
+
                         <div class="form-group">
 
-                            <label for="nip">
+                            <label>
+
                                 NIP
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
+
 
                             <input
                                 type="text"
-                                id="nip"
                                 name="nip"
                                 value="{{ old('nip') }}"
-                                placeholder="Masukkan NIP"
+                                placeholder="Masukkan NIP atau -"
                                 required
                             >
 
-                            @error('nip')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+
+                            <div class="hint">
+
+                                Jika tidak memiliki NIP,
+                                isi dengan tanda - atau angka 
+
+                            </div>
 
                         </div>
 
-                    </div>
 
-
-                    <!-- JABATAN -->
-
-                    <div class="row single">
+                        {{-- JABATAN --}}
 
                         <div class="form-group">
 
-                            <label for="jabatan">
+                            <label>
+
                                 Jabatan
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
+
 
                             <input
                                 type="text"
-                                id="jabatan"
                                 name="jabatan"
                                 value="{{ old('jabatan') }}"
                                 placeholder="Masukkan jabatan"
                                 required
                             >
 
-                            @error('jabatan')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
                         </div>
 
-                    </div>
 
-                </div>
+                        {{-- BIDANG / UNIT --}}
 
+                        <div
+                            class="form-group"
+                            id="unitGroup"
+                        >
 
-                <!-- =========================
-                     INSTANSI / ORGANISASI
-                ========================== -->
+                            <label>
 
-                <div class="section">
+                                Bidang / Unit
 
-                    <div class="section-title">
-                        Instansi / Organisasi
-                    </div>
+                                <span class="required">
+                                    *
+                                </span>
 
-
-                    <div class="row single">
-
-                        <div class="form-group">
-
-                            <label for="unit_organisasi">
-                                Unit Organisasi
-                                <span class="required">*</span>
                             </label>
+
 
                             <select
                                 name="unit_organisasi"
                                 id="unit_organisasi"
-                                required
                             >
 
                                 <option value="">
-                                    -- Pilih Unit Organisasi --
+                                    -- Pilih Bidang / Unit --
                                 </option>
 
-                                <option
-                                    value="Sekretariat"
-                                    {{ old('unit_organisasi') == 'Sekretariat' ? 'selected' : '' }}
-                                >
-                                    Sekretariat
-                                </option>
 
-                                <option
-                                    value="Bidang Informasi Publik dan Statistik"
-                                    {{ old('unit_organisasi') == 'Bidang Informasi Publik dan Statistik' ? 'selected' : '' }}
-                                >
-                                    Bidang Informasi Publik dan Statistik
-                                </option>
+                                @foreach ($struktur as $unit => $bagianList)
 
-                                <option
-                                    value="Bidang Komunikasi Publik"
-                                    {{ old('unit_organisasi') == 'Bidang Komunikasi Publik' ? 'selected' : '' }}
-                                >
-                                    Bidang Komunikasi Publik
-                                </option>
+                                    <option
+                                        value="{{ $unit }}"
+                                        @selected(old('unit_organisasi') == $unit)
+                                    >
 
-                                <option
-                                    value="Bidang Aplikasi Informatika"
-                                    {{ old('unit_organisasi') == 'Bidang Aplikasi Informatika' ? 'selected' : '' }}
-                                >
-                                    Bidang Aplikasi Informatika
-                                </option>
+                                        {{ $unit }}
 
-                                <option
-                                    value="Bidang Persandian dan Keamanan Informasi"
-                                    {{ old('unit_organisasi') == 'Bidang Persandian dan Keamanan Informasi' ? 'selected' : '' }}
-                                >
-                                    Bidang Persandian dan Keamanan Informasi
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {{-- ======================================================
+                    2. UNIT ORGANISASI
+                ======================================================= --}}
+
+                <section
+                    class="section"
+                    id="sectionUnitOrganisasi"
+                >
+
+                    <h2 class="section-title">
+                        2. Unit Organisasi
+                    </h2>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+
+                            <label>
+
+                                Bagian / Seksi
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <select
+                                name="bagian_seksi"
+                                id="bagian_seksi"
+                            >
+
+                                <option value="">
+                                    -- Pilih Bagian / Seksi --
                                 </option>
 
                             </select>
 
-                            @error('unit_organisasi')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
                         </div>
 
                     </div>
 
-                </div>
+                </section>
 
 
-                <!-- =========================
-                     WAKTU
-                ========================== -->
+                {{-- ======================================================
+                    3. KEPERLUAN PEMAKAIAN
+                ======================================================= --}}
 
-                <div class="section">
+                <section class="section">
 
-                    <div class="section-title">
-                        Waktu Pemakaian
-                    </div>
-
-
-                    <!-- TANGGAL -->
-
-                    <div class="row">
-
-                        <div class="form-group">
-
-                            <label for="tanggal">
-                                Tanggal
-                                <span class="required">*</span>
-                            </label>
-
-                            <input
-                                type="date"
-                                id="tanggal"
-                                name="tanggal"
-                                value="{{ old('tanggal') }}"
-                                required
-                            >
-
-                            @error('tanggal')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
+                    <h2 class="section-title">
+                        3. Keperluan Pemakaian
+                    </h2>
 
 
-                        <!-- HARI -->
+                    <div class="form-group">
 
-                        <div class="form-group">
-
-                            <label for="hari">
-                                Hari
-                            </label>
-
-                            <input
-                                type="text"
-                                id="hari"
-                                value="{{ old('tanggal') ? \Carbon\Carbon::parse(old('tanggal'))->locale('id')->translatedFormat('l') : '' }}"
-                                placeholder="Otomatis berdasarkan tanggal"
-                                readonly
-                            >
-
-                        </div>
+                        <textarea
+                            name="keperluan"
+                            placeholder="Masukkan keperluan pemakaian aula"
+                            required
+                        >{{ old('keperluan') }}</textarea>
 
                     </div>
 
-
-                    <!-- JAM -->
-
-                    <div class="row">
-
-                        <div class="form-group">
-
-                            <label for="jam_mulai">
-                                Jam Mulai
-                                <span class="required">*</span>
-                            </label>
-
-                            <input
-                                type="time"
-                                id="jam_mulai"
-                                name="jam_mulai"
-                                value="{{ old('jam_mulai') }}"
-                                required
-                            >
-
-                            @error('jam_mulai')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
+                </section>
 
 
-                        <div class="form-group">
+                {{-- ======================================================
+                    4. DATA PESERTA
+                ======================================================= --}}
 
-                            <label for="jam_selesai">
-                                Jam Selesai
-                                <span class="required">*</span>
-                            </label>
+                <section class="section">
 
-                            <input
-                                type="time"
-                                id="jam_selesai"
-                                name="jam_selesai"
-                                value="{{ old('jam_selesai') }}"
-                                required
-                            >
-
-                            @error('jam_selesai')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
-
-                    </div>
-
-                </div>
+                    <h2 class="section-title">
+                        4. Data Peserta
+                    </h2>
 
 
-                <!-- =========================
-                     KEPERLUAN
-                ========================== -->
+                    {{-- PESERTA RAPAT --}}
 
-                <div class="section">
+                    <div class="form-group">
 
-                    <div class="section-title">
-                        Keperluan
-                    </div>
+                        <label>
 
+                            Peserta Rapat
 
-                    <div class="row single">
+                            <span class="required">
+                                *
+                            </span>
 
-                        <div class="form-group">
-
-                            <label for="keperluan">
-                                Keperluan
-                                <span class="required">*</span>
-                            </label>
-
-                            <textarea
-                                id="keperluan"
-                                name="keperluan"
-                                placeholder="Jelaskan keperluan pemakaian aula..."
-                                required
-                            >{{ old('keperluan') }}</textarea>
-
-                            @error('keperluan')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
-
-                    </div>
-
-                </div>
+                        </label>
 
 
-                <!-- =========================
-                     PESERTA
-                ========================== -->
-
-                <div class="section">
-
-                    <div class="section-title">
-                        Data Peserta
-                    </div>
+                        <div class="radio-group">
 
 
-                    <div class="row">
+                            {{-- INTERNAL --}}
 
-                        <!-- JUMLAH PESERTA -->
+                            <div class="radio-card">
 
-                        <div class="form-group">
+                                <input
+                                    type="radio"
+                                    name="peserta_asal"
+                                    id="internal"
+                                    value="internal"
+                                    @checked(old('peserta_asal') === 'internal')
+                                    required
+                                >
 
-                            <label for="jumlah_peserta">
-                                Jumlah Peserta
-                                <span class="required">*</span>
-                            </label>
 
-                            <input
-                                type="number"
-                                id="jumlah_peserta"
-                                name="jumlah_peserta"
-                                value="{{ old('jumlah_peserta') }}"
-                                min="1"
-                                max="{{ $aula->kapasitas }}"
-                                placeholder="Jumlah peserta"
-                                required
-                            >
+                                <label
+                                    for="internal"
+                                    class="radio-label"
+                                >
 
-                            <div class="participant-info">
+                                    Internal
 
-                                Kapasitas
-                                <strong>
-                                    {{ $aula->kapasitas }} orang
-                                </strong>
+                                </label>
 
                             </div>
 
-                            @error('jumlah_peserta')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+
+                            {{-- EKSTERNAL --}}
+
+                            <div class="radio-card">
+
+                                <input
+                                    type="radio"
+                                    name="peserta_asal"
+                                    id="eksternal"
+                                    value="eksternal"
+                                    @checked(old('peserta_asal') === 'eksternal')
+                                >
+
+
+                                <label
+                                    for="eksternal"
+                                    class="radio-label"
+                                >
+
+                                    Eksternal
+
+                                </label>
+
+                            </div>
+
+
+                            {{-- INTERNAL & EKSTERNAL --}}
+
+                            <div class="radio-card">
+
+                                <input
+                                    type="radio"
+                                    name="peserta_asal"
+                                    id="internal_eksternal"
+                                    value="internal_eksternal"
+                                    @checked(old('peserta_asal') === 'internal_eksternal')
+                                >
+
+
+                                <label
+                                    for="internal_eksternal"
+                                    class="radio-label"
+                                >
+
+                                    Internal & Eksternal
+
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="form-grid"
+                        style="margin-top: 22px;"
+                    >
+
+
+                        {{-- INSTANSI --}}
+
+                        <div
+                            class="form-group hidden"
+                            id="instansiGroup"
+                        >
+
+                            <label>
+
+                                Nama Instansi / Organisasi
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                name="instansi"
+                                id="instansi"
+                                value="{{ old('instansi') }}"
+                                placeholder="Masukkan nama instansi / organisasi"
+                            >
 
                         </div>
 
 
-                        <!-- PIHAK LUAR -->
+                        {{-- JUMLAH PESERTA --}}
 
                         <div class="form-group">
 
                             <label>
-                                Peserta Pihak Luar
-                                <span class="required">*</span>
+
+                                Jumlah Peserta
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
 
-                            <div class="radio-group">
 
-                                <label class="radio-option">
+                            <input
+                                type="number"
+                                name="jumlah_peserta"
+                                value="{{ old('jumlah_peserta') }}"
+                                min="1"
+                                placeholder="Masukkan jumlah peserta"
+                                required
+                            >
 
-                                    <input
-                                        type="radio"
-                                        name="peserta_pihak_luar"
-                                        value="ada"
-                                        {{ old('peserta_pihak_luar') == 'ada' ? 'checked' : '' }}
-                                        required
-                                    >
-
-                                    Ada
-
-                                </label>
+                        </div>
 
 
-                                <label class="radio-option">
+                    </div>
 
-                                    <input
-                                        type="radio"
-                                        name="peserta_pihak_luar"
-                                        value="tidak_ada"
-                                        {{ old('peserta_pihak_luar') == 'tidak_ada' ? 'checked' : '' }}
-                                        required
-                                    >
+                </section>
 
-                                    Tidak Ada
+
+                {{-- ======================================================
+                    5. WAKTU
+                ======================================================= --}}
+
+                <section class="section">
+
+                    <h2 class="section-title">
+                        5. Waktu
+                    </h2>
+
+
+                    <div class="form-grid">
+
+
+                        {{-- TANGGAL MULAI --}}
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Tanggal Mulai
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="date"
+                                name="tanggal_mulai"
+                                id="tanggal_mulai"
+                                value="{{ old('tanggal_mulai') }}"
+                                min="{{ date('Y-m-d') }}"
+                                required
+                            >
+
+
+                            <div
+                                class="hari-display empty"
+                                id="hari_mulai"
+                            >
+
+                                Hari akan muncul otomatis
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- TANGGAL SELESAI --}}
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Tanggal Selesai
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="date"
+                                name="tanggal_selesai"
+                                id="tanggal_selesai"
+                                value="{{ old('tanggal_selesai') }}"
+                                min="{{ date('Y-m-d') }}"
+                                required
+                            >
+
+
+                            <div
+                                class="hari-display empty"
+                                id="hari_selesai"
+                            >
+
+                                Hari akan muncul otomatis
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    {{-- WAKTU PEMAKAIAN --}}
+
+                    <div class="waktu-container">
+
+                        <label>
+
+                            Waktu Pemakaian
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <div class="waktu-grid">
+
+
+                            {{-- PAGI - SIANG --}}
+
+                            <div
+                                class="waktu-card"
+                                data-waktu="pagi_siang"
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="kriteria_waktu"
+                                    id="pagi_siang"
+                                    value="pagi_siang"
+                                    @checked(old('kriteria_waktu') === 'pagi_siang')
+                                    required
+                                >
+
+
+                                <label
+                                    for="pagi_siang"
+                                    class="waktu-label"
+                                >
+
+                                    <span class="waktu-icon">
+                                        🌅
+                                    </span>
+
+
+                                    <span class="waktu-content">
+
+                                        <strong>
+                                            Pagi – Siang
+                                        </strong>
+
+                                        <span>
+                                            08.00 – 13.00
+                                        </span>
+
+                                    </span>
 
                                 </label>
 
                             </div>
 
-                            @error('peserta_pihak_luar')
-                                <div class="error-text">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+
+                            {{-- SIANG - SORE --}}
+
+                            <div
+                                class="waktu-card"
+                                data-waktu="siang_sore"
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="kriteria_waktu"
+                                    id="siang_sore"
+                                    value="siang_sore"
+                                    @checked(old('kriteria_waktu') === 'siang_sore')
+                                >
+
+
+                                <label
+                                    for="siang_sore"
+                                    class="waktu-label"
+                                >
+
+                                    <span class="waktu-icon">
+                                        ☀️
+                                    </span>
+
+
+                                    <span class="waktu-content">
+
+                                        <strong>
+                                            Siang – Sore
+                                        </strong>
+
+                                        <span>
+                                            14.00 – 16.00
+                                        </span>
+
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+
+                            {{-- MALAM --}}
+
+                            <div
+                                class="waktu-card"
+                                data-waktu="malam"
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="kriteria_waktu"
+                                    id="malam"
+                                    value="malam"
+                                    @checked(old('kriteria_waktu') === 'malam')
+                                >
+
+
+                                <label
+                                    for="malam"
+                                    class="waktu-label"
+                                >
+
+                                    <span class="waktu-icon">
+                                        🌙
+                                    </span>
+
+
+                                    <span class="waktu-content">
+
+                                        <strong>
+                                            Malam
+                                        </strong>
+
+                                        <span>
+                                            18.00 – 21.00
+                                        </span>
+
+                                    </span>
+
+                                </label>
+
+                            </div>
+
 
                         </div>
 
                     </div>
 
-                </div>
+                </section>
 
 
-                <!-- BUTTON -->
+                {{-- ======================================================
+                    TOMBOL AJUKAN
+                ======================================================= --}}
 
-                <div class="form-actions">
-
-                    <a
-                        href="{{ route('aulas') }}"
-                        class="btn btn-secondary"
-                    >
-                        Batal
-                    </a>
+                <div class="button-area">
 
                     <button
                         type="submit"
-                        class="btn btn-primary"
-                        id="submitButton"
+                        class="btn-submit"
                     >
-                        Ajukan Pemakaian
+
+                        Ajukan Pendaftaran
+
                     </button>
 
                 </div>
@@ -1004,97 +1373,617 @@
     </main>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
-
     <script>
 
-        const tanggalInput = document.getElementById('tanggal');
-        const hariInput = document.getElementById('hari');
-
-        const jumlahPesertaInput =
-            document.getElementById('jumlah_peserta');
-
-        const submitButton =
-            document.getElementById('submitButton');
-
-        const kapasitas =
-            {{ $aula->kapasitas }};
+        document.addEventListener('DOMContentLoaded', function () {
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | OTOMATIS MENAMPILKAN HARI
-        |--------------------------------------------------------------------------
-        */
+            /* ==========================================================
+               DATA STRUKTUR ORGANISASI
+            ========================================================== */
 
-        tanggalInput.addEventListener('change', function () {
+            const strukturOrganisasi = @json($struktur);
 
-            if (!this.value) {
-                hariInput.value = '';
-                return;
+
+            /* ==========================================================
+               ELEMEN FORM
+            ========================================================== */
+
+            const form =
+                document.getElementById('formPendaftaran');
+
+            const unitSelect =
+                document.getElementById('unit_organisasi');
+
+            const bagianSelect =
+                document.getElementById('bagian_seksi');
+
+            const sectionUnit =
+                document.getElementById('sectionUnitOrganisasi');
+
+            const unitGroup =
+                document.getElementById('unitGroup');
+
+            const instansiGroup =
+                document.getElementById('instansiGroup');
+
+            const instansiInput =
+                document.getElementById('instansi');
+
+            const tanggalMulai =
+                document.getElementById('tanggal_mulai');
+
+            const tanggalSelesai =
+                document.getElementById('tanggal_selesai');
+
+
+            /* ==========================================================
+               HARI INDONESIA
+            ========================================================== */
+
+            function getNamaHari(tanggal) {
+
+                if (!tanggal) {
+                    return '';
+                }
+
+
+                const hari = [
+                    'Minggu',
+                    'Senin',
+                    'Selasa',
+                    'Rabu',
+                    'Kamis',
+                    'Jumat',
+                    'Sabtu'
+                ];
+
+
+                const date =
+                    new Date(tanggal + 'T00:00:00');
+
+
+                return hari[date.getDay()];
+
             }
 
-            const tanggal = new Date(this.value + 'T00:00:00');
 
-            const hari = [
-                'Minggu',
-                'Senin',
-                'Selasa',
-                'Rabu',
-                'Kamis',
-                'Jumat',
-                'Sabtu'
-            ];
+            function updateHariMulai() {
 
-            hariInput.value =
-                hari[tanggal.getDay()];
-        });
+                const hariElement =
+                    document.getElementById('hari_mulai');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CEK KAPASITAS PESERTA
-        |--------------------------------------------------------------------------
-        */
+                if (!tanggalMulai.value) {
 
-        jumlahPesertaInput.addEventListener('input', function () {
+                    hariElement.textContent =
+                        'Hari akan muncul otomatis';
 
-            const jumlah = parseInt(this.value) || 0;
+                    hariElement.classList.add('empty');
 
-            if (jumlah > kapasitas) {
+                    return;
 
-                this.setCustomValidity(
-                    'Jumlah peserta melebihi kapasitas aula.'
+                }
+
+
+                hariElement.textContent =
+                    getNamaHari(tanggalMulai.value);
+
+                hariElement.classList.remove('empty');
+
+            }
+
+
+            function updateHariSelesai() {
+
+                const hariElement =
+                    document.getElementById('hari_selesai');
+
+
+                if (!tanggalSelesai.value) {
+
+                    hariElement.textContent =
+                        'Hari akan muncul otomatis';
+
+                    hariElement.classList.add('empty');
+
+                    return;
+
+                }
+
+
+                hariElement.textContent =
+                    getNamaHari(tanggalSelesai.value);
+
+                hariElement.classList.remove('empty');
+
+            }
+
+
+            /* ==========================================================
+               UPDATE BAGIAN / SEKSI
+            ========================================================== */
+
+            function updateBagianSeksi(selectedValue = '') {
+
+                const unit =
+                    unitSelect.value;
+
+
+                bagianSelect.innerHTML = '';
+
+
+                const defaultOption =
+                    document.createElement('option');
+
+
+                defaultOption.value = '';
+
+
+                defaultOption.textContent =
+                    '-- Pilih Bagian / Seksi --';
+
+
+                bagianSelect.appendChild(defaultOption);
+
+
+                if (
+                    !unit ||
+                    !strukturOrganisasi[unit]
+                ) {
+
+                    return;
+
+                }
+
+
+                strukturOrganisasi[unit].forEach(
+                    function (bagian) {
+
+                        const option =
+                            document.createElement('option');
+
+
+                        option.value = bagian;
+
+
+                        option.textContent = bagian;
+
+
+                        if (bagian === selectedValue) {
+
+                            option.selected = true;
+
+                        }
+
+
+                        bagianSelect.appendChild(option);
+
+                    }
                 );
 
-                submitButton.disabled = true;
-
-            } else {
-
-                this.setCustomValidity('');
-
-                submitButton.disabled = false;
             }
-        });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CEK DATA LAMA SAAT HALAMAN DIBUKA
-        |--------------------------------------------------------------------------
-        */
+            /* ==========================================================
+               PESERTA RAPAT
+            ========================================================== */
 
-        if (tanggalInput.value) {
+            function ubahPeserta() {
 
-            tanggalInput.dispatchEvent(
-                new Event('change')
+                const peserta =
+                    document.querySelector(
+                        'input[name="peserta_asal"]:checked'
+                    );
+
+
+                if (!peserta) {
+
+                    return;
+
+                }
+
+
+                if (peserta.value === 'internal') {
+
+                    unitGroup.classList.remove('hidden');
+
+                    sectionUnit.classList.remove('hidden');
+
+                    unitSelect.required = true;
+
+                    bagianSelect.required = true;
+
+                    instansiGroup.classList.add('hidden');
+
+                    instansiInput.required = false;
+
+                    instansiInput.value = '';
+
+                }
+
+
+                else if (peserta.value === 'eksternal') {
+
+                    unitGroup.classList.add('hidden');
+
+                    sectionUnit.classList.add('hidden');
+
+                    unitSelect.required = false;
+
+                    bagianSelect.required = false;
+
+                    unitSelect.value = '';
+
+                    bagianSelect.innerHTML =
+                        '<option value="">-- Pilih Bagian / Seksi --</option>';
+
+                    instansiGroup.classList.remove('hidden');
+
+                    instansiInput.required = true;
+
+                }
+
+
+                else if (
+                    peserta.value === 'internal_eksternal'
+                ) {
+
+                    unitGroup.classList.remove('hidden');
+
+                    sectionUnit.classList.remove('hidden');
+
+                    unitSelect.required = true;
+
+                    bagianSelect.required = true;
+
+                    instansiGroup.classList.remove('hidden');
+
+                    instansiInput.required = true;
+
+                }
+
+            }
+
+
+            /* ==========================================================
+               EVENT BIDANG / UNIT
+            ========================================================== */
+
+            unitSelect.addEventListener(
+                'change',
+                function () {
+
+                    updateBagianSeksi();
+
+                }
             );
 
-        }
+
+            /* ==========================================================
+               EVENT PESERTA RAPAT
+            ========================================================== */
+
+            document
+                .querySelectorAll(
+                    'input[name="peserta_asal"]'
+                )
+                .forEach(
+                    function (radio) {
+
+                        radio.addEventListener(
+                            'change',
+                            ubahPeserta
+                        );
+
+                    }
+                );
+
+
+            /* ==========================================================
+               CEK KETERSEDIAAN WAKTU
+            ========================================================== */
+
+            async function cekKetersediaan() {
+
+                const mulai =
+                    tanggalMulai.value;
+
+                const selesai =
+                    tanggalSelesai.value;
+
+
+                if (!mulai || !selesai) {
+
+                    aktifkanSemuaWaktu();
+
+                    return;
+
+                }
+
+
+                if (selesai < mulai) {
+
+                    aktifkanSemuaWaktu();
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const url =
+                        "{{ route('pendaftaran.availability') }}"
+                        + "?aula_id={{ $aula->id }}"
+                        + "&tanggal_mulai="
+                        + encodeURIComponent(mulai)
+                        + "&tanggal_selesai="
+                        + encodeURIComponent(selesai);
+
+
+                    const response =
+                        await fetch(
+                            url,
+                            {
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            'Gagal mengecek ketersediaan.'
+                        );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    const terpakai =
+                        data.terpakai || [];
+
+
+                    document
+                        .querySelectorAll('.waktu-card')
+                        .forEach(
+                            function (card) {
+
+                                const waktu =
+                                    card.dataset.waktu;
+
+
+                                const input =
+                                    card.querySelector('input');
+
+
+                                if (
+                                    terpakai.includes(waktu)
+                                ) {
+
+                                    card.classList.add(
+                                        'disabled'
+                                    );
+
+                                    input.disabled = true;
+
+                                    input.checked = false;
+
+                                }
+
+                                else {
+
+                                    card.classList.remove(
+                                        'disabled'
+                                    );
+
+                                    input.disabled = false;
+
+                                }
+
+                            }
+                        );
+
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+                    aktifkanSemuaWaktu();
+
+                }
+
+            }
+
+
+            function aktifkanSemuaWaktu() {
+
+                document
+                    .querySelectorAll('.waktu-card')
+                    .forEach(
+                        function (card) {
+
+                            card.classList.remove(
+                                'disabled'
+                            );
+
+
+                            const input =
+                                card.querySelector('input');
+
+
+                            input.disabled = false;
+
+                        }
+                    );
+
+            }
+
+
+            /* ==========================================================
+               EVENT TANGGAL MULAI
+            ========================================================== */
+
+            tanggalMulai.addEventListener(
+                'change',
+                function () {
+
+                    tanggalSelesai.min =
+                        tanggalMulai.value;
+
+
+                    if (
+                        tanggalSelesai.value &&
+                        tanggalSelesai.value <
+                        tanggalMulai.value
+                    ) {
+
+                        tanggalSelesai.value = '';
+
+                    }
+
+
+                    updateHariMulai();
+
+                    updateHariSelesai();
+
+                    cekKetersediaan();
+
+                }
+            );
+
+
+            /* ==========================================================
+               EVENT TANGGAL SELESAI
+            ========================================================== */
+
+            tanggalSelesai.addEventListener(
+                'change',
+                function () {
+
+                    updateHariSelesai();
+
+                    cekKetersediaan();
+
+                }
+            );
+
+
+            /* ==========================================================
+               OLD VALUE
+            ========================================================== */
+
+            const oldUnit =
+                @json(old('unit_organisasi', ''));
+
+
+            const oldBagian =
+                @json(old('bagian_seksi', ''));
+
+
+            if (oldUnit) {
+
+                unitSelect.value =
+                    oldUnit;
+
+
+                updateBagianSeksi(
+                    oldBagian
+                );
+
+            }
+
+
+            /* ==========================================================
+               INISIALISASI
+            ========================================================== */
+
+            updateHariMulai();
+
+            updateHariSelesai();
+
+            ubahPeserta();
+
+
+            if (tanggalMulai.value) {
+
+                tanggalSelesai.min =
+                    tanggalMulai.value;
+
+            }
+
+
+            if (
+                tanggalMulai.value &&
+                tanggalSelesai.value
+            ) {
+
+                cekKetersediaan();
+
+            }
+
+
+            /* ==========================================================
+               VALIDASI SUBMIT
+            ========================================================== */
+
+            form.addEventListener(
+                'submit',
+                function (event) {
+
+                    const waktuTerpilih =
+                        document.querySelector(
+                            'input[name="kriteria_waktu"]:checked'
+                        );
+
+
+                    if (!waktuTerpilih) {
+
+                        event.preventDefault();
+
+                        alert(
+                            'Silakan pilih waktu pemakaian yang tersedia.'
+                        );
+
+                        return;
+
+                    }
+
+
+                    const card =
+                        waktuTerpilih.closest(
+                            '.waktu-card'
+                        );
+
+
+                    if (
+                        waktuTerpilih.disabled ||
+                        card.classList.contains('disabled')
+                    ) {
+
+                        event.preventDefault();
+
+                        alert(
+                            'Waktu yang dipilih sudah digunakan. Silakan pilih waktu lain.'
+                        );
+
+                    }
+
+                }
+            );
+
+        });
 
     </script>
 
 </body>
+
 </html>

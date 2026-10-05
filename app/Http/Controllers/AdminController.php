@@ -2,38 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pendaftaran;
 use App\Models\Aula;
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD ADMIN
+    | Kriteria Waktu
     |--------------------------------------------------------------------------
     */
+    private function kriteriaWaktu(): array
+    {
+        return [
+            'pagi_siang' => [
+                'nama' => 'Pagi – Siang',
+                'jam' => '08.00 – 13.00',
+            ],
 
+            'siang_sore' => [
+                'nama' => 'Siang – Sore',
+                'jam' => '14.00 – 16.00',
+            ],
+
+            'malam' => [
+                'nama' => 'Malam',
+                'jam' => '18.00 – 21.00',
+            ],
+        ];
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard Admin
+    |--------------------------------------------------------------------------
+    */
     public function dashboard()
     {
         $stats = [
-            'total' => Pendaftaran::count(),
+            'totalPendaftar' => Pendaftaran::count(),
 
-            'menunggu' => Pendaftaran::where('status', 'menunggu')
-                ->count(),
+            'menunggu' => Pendaftaran::where(
+                'status',
+                'menunggu'
+            )->count(),
 
-            'disetujui' => Pendaftaran::where('status', 'disetujui')
-                ->count(),
+            'disetujui' => Pendaftaran::where(
+                'status',
+                'disetujui'
+            )->count(),
 
-            'ditolak' => Pendaftaran::where('status', 'ditolak')
-                ->count(),
+            'ditolak' => Pendaftaran::where(
+                'status',
+                'ditolak'
+            )->count(),
 
-            'aula' => Aula::count(),
+            'aulas' => Aula::count(),
         ];
 
         return view('admin.dashboard', [
-            'user' => Auth::user(),
             'stats' => $stats,
         ]);
     }
@@ -41,244 +70,99 @@ class AdminController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | RIWAYAT PENDAFTARAN
+    | Riwayat Pendaftaran Admin
     |--------------------------------------------------------------------------
     */
-
     public function history(Request $request)
     {
-        $status = $request->query('status');
-
-
         $query = Pendaftaran::with([
             'user',
-            'aula'
+            'aula',
         ]);
 
-
         /*
-        | FILTER STATUS
+        |--------------------------------------------------------------------------
+        | Filter Status
+        |--------------------------------------------------------------------------
         */
-
-        if (in_array($status, [
-            'menunggu',
-            'disetujui',
-            'ditolak',
-            'dibatalkan'
-        ])) {
-
-            $query->where('status', $status);
-
-        } else {
-
-            $status = 'semua';
-
+        if (
+            $request->filled('status') &&
+            $request->status !== 'semua'
+        ) {
+            $query->where(
+                'status',
+                $request->status
+            );
         }
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Ambil Data
+        |--------------------------------------------------------------------------
+        */
         $pendaftarans = $query
-            ->latest()
+            ->orderByDesc('created_at')
             ->get();
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Kirim ke Blade
+        |--------------------------------------------------------------------------
+        */
         return view('admin.history', [
-            'user' => Auth::user(),
             'pendaftarans' => $pendaftarans,
-            'statusAktif' => $status,
+
+            'statusAktif' => $request->status ?? 'semua',
         ]);
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL PENDAFTARAN
+    | Detail Pendaftaran
     |--------------------------------------------------------------------------
     */
-
     public function show(Pendaftaran $pendaftaran)
     {
         $pendaftaran->load([
             'user',
-            'aula'
+            'aula',
         ]);
 
-        return view('admin.pendaftaran.show', [
-            'user' => Auth::user(),
-            'pendaftaran' => $pendaftaran,
-        ]);
+        return view(
+            'admin.pendaftaran.show',
+            [
+                'pendaftaran' => $pendaftaran,
+            ]
+        );
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | DATA AULA
+    | Approve Pendaftaran
     |--------------------------------------------------------------------------
     */
-
-    public function aulas()
+    public function approve(Pendaftaran $pendaftaran)
     {
-        $aulas = Aula::latest()->get();
-
-        return view('admin.aulas.index', [
-            'user' => Auth::user(),
-            'aulas' => $aulas,
-        ]);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TAMBAH AULA (FORM)
-    |--------------------------------------------------------------------------
-    */
-
-    public function createAula()
-    {
-        return view('admin.aulas.create', [
-            'user' => Auth::user(),
-        ]);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SIMPAN AULA BARU
-    |--------------------------------------------------------------------------
-    */
-
-    public function storeAula(Request $request)
-    {
-        $validated = $request->validate([
-            'nama_aula' => ['required', 'string', 'max:255'],
-            'kapasitas' => ['required', 'integer', 'min:1'],
-            'keterangan' => ['required', 'string'],
-            'fasilitas' => ['nullable', 'string'],
-        ], [
-            'nama_aula.required' => 'Nama aula wajib diisi.',
-            'nama_aula.max' => 'Nama aula maksimal 255 karakter.',
-            'kapasitas.required' => 'Kapasitas aula wajib diisi.',
-            'kapasitas.integer' => 'Kapasitas harus berupa angka bulat.',
-            'kapasitas.min' => 'Kapasitas minimal 1 orang.',
-            'keterangan.required' => 'Keterangan aula wajib diisi.',
-        ]);
-
-        Aula::create($validated);
-
-        return redirect()
-            ->route('admin.aulas')
-            ->with('success', 'Data aula baru berhasil ditambahkan.');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | DETAIL AULA
-    |--------------------------------------------------------------------------
-    */
-
-    public function showAula(Aula $aula)
-    {
-        $aula->load(['pendaftarans' => function ($query) {
-            $query->latest();
-        }]);
-
-        return view('admin.aulas.show', [
-            'user' => Auth::user(),
-            'aula' => $aula,
-        ]);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | EDIT AULA (FORM)
-    |--------------------------------------------------------------------------
-    */
-
-    public function editAula(Aula $aula)
-    {
-        return view('admin.aulas.edit', [
-            'user' => Auth::user(),
-            'aula' => $aula,
-        ]);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE AULA
-    |--------------------------------------------------------------------------
-    */
-
-    public function updateAula(Request $request, Aula $aula)
-    {
-        $validated = $request->validate([
-            'nama_aula' => ['required', 'string', 'max:255'],
-            'kapasitas' => ['required', 'integer', 'min:1'],
-            'keterangan' => ['required', 'string'],
-            'fasilitas' => ['nullable', 'string'],
-        ], [
-            'nama_aula.required' => 'Nama aula wajib diisi.',
-            'nama_aula.max' => 'Nama aula maksimal 255 karakter.',
-            'kapasitas.required' => 'Kapasitas aula wajib diisi.',
-            'kapasitas.integer' => 'Kapasitas harus berupa angka bulat.',
-            'kapasitas.min' => 'Kapasitas minimal 1 orang.',
-            'keterangan.required' => 'Keterangan aula wajib diisi.',
-        ]);
-
-        $aula->update($validated);
-
-        return redirect()
-            ->route('admin.aulas')
-            ->with('success', 'Data aula berhasil diperbarui.');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS AULA
-    |--------------------------------------------------------------------------
-    */
-
-    public function destroyAula(Aula $aula)
-    {
-        // Proteksi: jangan hapus jika masih memiliki pendaftaran aktif (menunggu atau disetujui)
-        if ($aula->pendaftarans()->whereIn('status', ['menunggu', 'disetujui'])->exists()) {
-            return redirect()
-                ->route('admin.aulas')
-                ->with('error', 'Aula tidak dapat dihapus karena masih memiliki pengajuan pendaftaran aktif (menunggu/disetujui).');
+        /*
+        |--------------------------------------------------------------------------
+        | Hanya pengajuan menunggu yang dapat diproses
+        |--------------------------------------------------------------------------
+        */
+        if ($pendaftaran->status !== 'menunggu') {
+            return back()->with(
+                'error',
+                'Pengajuan ini sudah diproses sebelumnya.'
+            );
         }
-
-        $aula->delete();
-
-        return redirect()
-            ->route('admin.aulas')
-            ->with('success', 'Data aula berhasil dihapus.');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SETUJUI PENDAFTARAN
-    |--------------------------------------------------------------------------
-    */
-
-    public function approve(
-        Request $request,
-        Pendaftaran $pendaftaran
-    ) {
-        $data = $request->validate([
-            'catatan_admin' => [
-                'nullable',
-                'string',
-            ],
-        ]);
 
 
         /*
-        | Cek bentrok jadwal
+        |--------------------------------------------------------------------------
+        | Cek Bentrok Jadwal
+        |--------------------------------------------------------------------------
         */
-
         $bentrok = Pendaftaran::where(
                 'id',
                 '!=',
@@ -289,84 +173,447 @@ class AdminController extends Controller
                 $pendaftaran->aula_id
             )
             ->where(
-                'tanggal',
-                $pendaftaran->tanggal
-            )
-            ->where(
                 'status',
                 'disetujui'
             )
-            ->where(function ($query) use ($pendaftaran) {
-
-                $query->where(
-                    'jam_mulai',
-                    '<',
-                    $pendaftaran->jam_selesai
-                )
-                ->where(
-                    'jam_selesai',
-                    '>',
-                    $pendaftaran->jam_mulai
-                );
-
-            })
+            ->whereNotNull('tanggal_mulai')
+            ->whereNotNull('tanggal_selesai')
+            ->where(
+                'tanggal_mulai',
+                '<=',
+                $pendaftaran->tanggal_selesai
+            )
+            ->where(
+                'tanggal_selesai',
+                '>=',
+                $pendaftaran->tanggal_mulai
+            )
+            ->where(
+                'kriteria_waktu',
+                $pendaftaran->kriteria_waktu
+            )
             ->exists();
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Jika Bentrok
+        |--------------------------------------------------------------------------
+        */
         if ($bentrok) {
+
+            $namaWaktu = [
+                'pagi_siang' => 'Pagi – Siang',
+                'siang_sore' => 'Siang – Sore',
+                'malam' => 'Malam',
+            ];
+
+            $waktu = $namaWaktu[
+                $pendaftaran->kriteria_waktu
+            ] ?? 'waktu tersebut';
 
             return back()->with(
                 'error',
-                'Pendaftaran tidak dapat disetujui karena jadwal aula sudah digunakan oleh pendaftaran lain.'
+                'Pengajuan tidak dapat disetujui karena jadwal '
+                . $waktu
+                . ' pada aula dan tanggal tersebut sudah digunakan.'
             );
         }
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Setujui
+        |--------------------------------------------------------------------------
+        */
         $pendaftaran->update([
             'status' => 'disetujui',
-            'catatan_admin' =>
-                $data['catatan_admin'] ?? null,
+            'catatan_admin' => null,
         ]);
 
 
         return back()->with(
             'success',
-            'Pendaftaran berhasil disetujui.'
+            'Pengajuan berhasil disetujui.'
         );
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | TOLAK PENDAFTARAN
+    | Reject Pendaftaran
     |--------------------------------------------------------------------------
     */
-
     public function reject(
         Request $request,
         Pendaftaran $pendaftaran
     ) {
-        $data = $request->validate([
-            'catatan_admin' => [
-                'required',
-                'string',
+        $validated = $request->validate(
+            [
+                'catatan_admin' => [
+                    'required',
+                    'string',
+                    'max:1000',
+                ],
             ],
-        ], [
-            'catatan_admin.required' =>
-                'Catatan wajib diisi ketika menolak pendaftaran.',
-        ]);
+            [
+                'catatan_admin.required' =>
+                    'Catatan penolakan wajib diisi.',
+            ]
+        );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Tolak Pengajuan
+        |--------------------------------------------------------------------------
+        */
         $pendaftaran->update([
             'status' => 'ditolak',
             'catatan_admin' =>
-                $data['catatan_admin'],
+                $validated['catatan_admin'],
         ]);
 
 
         return back()->with(
             'success',
-            'Pendaftaran berhasil ditolak.'
+            'Pengajuan berhasil ditolak.'
         );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laporan
+    |--------------------------------------------------------------------------
+    */
+    public function laporan(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Query Dasar
+        |--------------------------------------------------------------------------
+        */
+        $query = Pendaftaran::with([
+            'user',
+            'aula',
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Filter Tanggal Mulai
+        |--------------------------------------------------------------------------
+        |
+        | Jika tanggal mulai diisi, tampilkan pengajuan
+        | yang tanggal selesainya masih berada pada/ setelah
+        | tanggal tersebut.
+        |
+        */
+        if ($request->filled('tanggal_mulai')) {
+
+            $query->whereDate(
+                'tanggal_selesai',
+                '>=',
+                $request->tanggal_mulai
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Filter Tanggal Selesai
+        |--------------------------------------------------------------------------
+        |
+        | Jika tanggal selesai diisi, tampilkan pengajuan
+        | yang tanggal mulainya masih berada pada/ sebelum
+        | tanggal tersebut.
+        |
+        */
+        if ($request->filled('tanggal_selesai')) {
+
+            $query->whereDate(
+                'tanggal_mulai',
+                '<=',
+                $request->tanggal_selesai
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Filter Aula
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('aula_id')) {
+
+            $query->where(
+                'aula_id',
+                $request->aula_id
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Filter Status
+        |--------------------------------------------------------------------------
+        */
+        if (
+            $request->filled('status') &&
+            $request->status !== 'semua'
+        ) {
+
+            $query->where(
+                'status',
+                $request->status
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Ambil Data Laporan
+        |--------------------------------------------------------------------------
+        |
+        | Urutan:
+        | 1. Tanggal mulai
+        | 2. Pagi – Siang
+        | 3. Siang – Sore
+        | 4. Malam
+        |
+        */
+        $pendaftarans = $query
+            ->orderBy('tanggal_mulai')
+            ->orderByRaw("
+                CASE kriteria_waktu
+                    WHEN 'pagi_siang' THEN 1
+                    WHEN 'siang_sore' THEN 2
+                    WHEN 'malam' THEN 3
+                    ELSE 4
+                END
+            ")
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Data Aula
+        |--------------------------------------------------------------------------
+        */
+        $aulas = Aula::orderBy(
+            'nama_aula'
+        )->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Nilai Filter Aktif
+        |--------------------------------------------------------------------------
+        |
+        | Variabel ini dibutuhkan oleh
+        | resources/views/admin/laporan.blade.php
+        |
+        */
+        $tanggalMulai = $request->tanggal_mulai;
+        $tanggalSelesai = $request->tanggal_selesai;
+        $aulaId = $request->aula_id;
+        $status = $request->status;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Kirim Semua Data ke Blade
+        |--------------------------------------------------------------------------
+        */
+        return view('admin.laporan', [
+
+            'pendaftarans' => $pendaftarans,
+
+            'aulas' => $aulas,
+
+            'kriteriaWaktu' => $this->kriteriaWaktu(),
+
+            'tanggalMulai' => $tanggalMulai,
+
+            'tanggalSelesai' => $tanggalSelesai,
+
+            'aulaId' => $aulaId,
+
+            'status' => $status,
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Data Aula
+    |--------------------------------------------------------------------------
+    */
+    public function aulas()
+    {
+        $aulas = Aula::latest()->get();
+
+        return view(
+            'admin.aulas.index',
+            [
+                'aulas' => $aulas,
+            ]
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Create Aula
+    |--------------------------------------------------------------------------
+    */
+    public function createAula()
+    {
+        return view(
+            'admin.aulas.create'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Store Aula
+    |--------------------------------------------------------------------------
+    */
+    public function storeAula(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_aula' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'kapasitas' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+
+            'keterangan' => [
+                'required',
+                'string',
+            ],
+
+            'fasilitas' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
+
+        Aula::create($validated);
+
+
+        return redirect()
+            ->route('admin.aulas')
+            ->with(
+                'success',
+                'Data aula berhasil ditambahkan.'
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show Aula
+    |--------------------------------------------------------------------------
+    */
+    public function showAula(Aula $aula)
+    {
+        return view(
+            'admin.aulas.show',
+            [
+                'aula' => $aula,
+            ]
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Edit Aula
+    |--------------------------------------------------------------------------
+    */
+    public function editAula(Aula $aula)
+    {
+        return view(
+            'admin.aulas.edit',
+            [
+                'aula' => $aula,
+            ]
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Aula
+    |--------------------------------------------------------------------------
+    */
+    public function updateAula(
+        Request $request,
+        Aula $aula
+    ) {
+        $validated = $request->validate([
+            'nama_aula' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'kapasitas' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+
+            'keterangan' => [
+                'required',
+                'string',
+            ],
+
+            'fasilitas' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
+
+        $aula->update($validated);
+
+
+        return redirect()
+            ->route('admin.aulas')
+            ->with(
+                'success',
+                'Data aula berhasil diperbarui.'
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Delete Aula
+    |--------------------------------------------------------------------------
+    */
+    public function destroyAula(
+        Aula $aula
+    ) {
+        $aula->delete();
+
+
+        return redirect()
+            ->route('admin.aulas')
+            ->with(
+                'success',
+                'Data aula berhasil dihapus.'
+            );
     }
 }

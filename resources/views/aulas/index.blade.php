@@ -2,484 +2,702 @@
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Daftar Aula | SAPA</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f9;
-            color: #1f2937;
+            background: #f1f5f9;
+            color: white;
+            line-height: 1.6;
         }
 
+        /* =====================================================
+           HEADER
+        ====================================================== */
 
-        /* =========================
-           NAVBAR
-        ========================== */
-
-        .navbar {
+        .header {
             background: #12355b;
             color: white;
+            padding: 24px 5%;
+        }
 
-            padding: 18px 40px;
+        .header-inner {
+            max-width: 1180px;
+            margin: auto;
 
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
 
-
-        .brand h1 {
-            font-size: 22px;
-            margin-bottom: 4px;
-        }
-
-
-        .brand p {
-            font-size: 13px;
-            color: #dbe7f3;
-        }
-
-
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-name {
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           LOGOUT
-        ========================== */
-
-        .logout {
-            border: none;
-
-            background: #dc3545;
-            color: white;
-            padding: 9px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
-        }
-
-        .logout:hover {
-            background: #bb2d3b;
-        }
-
-
-        /* =========================
-           CONTAINER
-        ========================== */
-
-        .container {
-            max-width: 1100px;
-            margin: 35px auto;
-            padding: 0 20px;
-        }
-
-
-        /* =========================
-           TOP SECTION
-        ========================== */
-
-        .top-section {
-            margin-bottom: 25px;
-        }
-
-
-        .top-section h2 {
-            font-size: 27px;
-            color: #12355b;
-            margin-bottom: 8px;
-        }
-
-
-        .top-section p {
-            color: #6b7280;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-
-        .back {
-            display: inline-block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #12355b;
-            font-size: 14px;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-
-        .back:hover {
-            color: #0d2946;
-        }
-
-
-        /* =========================
-           AULA GRID
-        ========================== */
-
-        .aula-grid {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
         }
 
-
-        /* =========================
-           AULA CARD
-        ========================== */
-
-        .aula-card {
-            background: white;
-            border: 1px solid #e1e5ea;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow:
-                0 3px 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            min-height: 360px;
-            transition: 0.2s;
+        .brand h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 3px;
         }
 
-
-        .aula-card:hover {
-            transform: translateY(-3px);
-            box-shadow:
-                0 6px 18px rgba(0, 0, 0, 0.08);
-            border-color: #cfd8e3;
+        .brand p {
+            font-size: 16px;
+            opacity: 0.92;
         }
 
-
-        .aula-card h3 {
-            color: #12355b;
-            font-size: 21px;
-            margin-bottom: 18px;
-        }
-
-
-        /* =========================
-           CAPACITY
-        ========================== */
-
-        .capacity {
-            background: #e9f1f8;
-            color: #12355b;
-            padding: 10px 12px;
-            border-radius: 6px;
-            display: inline-block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 18px;
-            width: fit-content;
-        }
-
-
-        /* =========================
-           INFORMATION
-        ========================== */
-
-        .info {
-            margin-bottom: 15px;
-        }
-
-
-        .info strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #374151;
-            font-size: 14px;
-        }
-
-
-        .info p {
-            color: #6b7280;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           TOMBOL PILIH AULA
-        ========================== */
-
-        .btn-pilih {
-            display: block;
-            width: 100%;
-            margin-top: auto;
-            padding: 12px 18px;
-            background: #12355b;
+        .back-dashboard {
             color: white;
             text-decoration: none;
-            text-align: center;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: bold;
-            transition: 0.2s;
+
+            border: 1px solid rgba(255, 255, 255, 0.45);
+
+            padding: 10px 17px;
+            border-radius: 8px;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            transition: 0.2s ease;
         }
 
+        .back-dashboard:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* =====================================================
+           CONTAINER
+        ====================================================== */
+
+        .container {
+            width: 92%;
+            max-width: 1180px;
+
+            margin: 32px auto 50px;
+        }
+
+        /* =====================================================
+           TITLE
+        ====================================================== */
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-heading h2 {
+            color: #12355b;
+            font-size: 30px;
+            font-weight: 800;
+
+            margin-bottom: 4px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* =====================================================
+           GRID AULA
+        ====================================================== */
+
+        .aula-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 24px;
+
+            align-items: stretch;
+        }
+
+        /* =====================================================
+           FULL FOTO CARD
+        ====================================================== */
+
+        .aula-card {
+            position: relative;
+
+            height: 520px;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            background: #12355b;
+
+            box-shadow:
+                0 8px 30px
+                rgba(15, 23, 42, 0.16);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .aula-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 14px 35px
+                rgba(15, 23, 42, 0.22);
+        }
+
+        /* =====================================================
+           FOTO FULL
+        ====================================================== */
+
+        .aula-photo {
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+        }
+
+        .aula-photo img {
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            display: block;
+
+            transition:
+                transform 0.4s ease;
+        }
+
+        .aula-card:hover .aula-photo img {
+            transform: scale(1.04);
+        }
+
+        /* =====================================================
+           OVERLAY FOTO
+        ====================================================== */
+
+        .aula-photo::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.08) 0%,
+                    rgba(0, 0, 0, 0.20) 35%,
+                    rgba(0, 0, 0, 0.78) 100%
+                );
+
+            z-index: 1;
+        }
+
+        /* =====================================================
+           CONTENT DI ATAS FOTO
+        ====================================================== */
+
+        .aula-content {
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 2;
+
+            padding: 28px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: flex-end;
+        }
+
+        /* =====================================================
+           JUDUL AULA
+        ====================================================== */
+
+        .aula-title {
+            margin-bottom: 18px;
+        }
+
+        .aula-title h3 {
+            font-size: 30px;
+
+            font-weight: 800;
+
+            color: white;
+
+            margin-bottom: 3px;
+
+            text-shadow:
+                0 2px 5px rgba(0, 0, 0, 0.35);
+        }
+
+        .aula-title span {
+            font-size: 14px;
+
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* =====================================================
+           INFO AULA
+        ====================================================== */
+
+        .aula-info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+        .info-box {
+            background:
+                rgba(255, 255, 255, 0.14);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.25);
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            backdrop-filter: blur(4px);
+        }
+
+        .info-label {
+            display: block;
+
+            font-size: 12px;
+
+            color:
+                rgba(255, 255, 255, 0.78);
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            display: block;
+
+            font-size: 14px;
+
+            color: white;
+
+            font-weight: 800;
+
+            line-height: 1.4;
+        }
+
+        /* =====================================================
+           FASILITAS
+        ====================================================== */
+
+        .facility {
+            margin-bottom: 20px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(0, 0, 0, 0.28);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.16);
+        }
+
+        .facility-title {
+            font-size: 14px;
+
+            font-weight: 800;
+
+            color: white;
+
+            margin-bottom: 3px;
+        }
+
+        .facility-text {
+            color:
+                rgba(255, 255, 255, 0.92);
+
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           BUTTON
+        ====================================================== */
+
+        .aula-action {
+            display: flex;
+
+            justify-content: flex-end;
+        }
+
+        .btn-pilih {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-height: 46px;
+
+            padding: 11px 24px;
+
+            background: white;
+
+            color: #12355b;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
 
         .btn-pilih:hover {
-            background: #0d2946;
+            background: #e8eef5;
+
+            transform: translateY(-1px);
         }
 
+        /* =====================================================
+           RESPONSIVE TABLET
+        ====================================================== */
 
-        /* =========================
-           EMPTY DATA
-        ========================== */
+        @media (max-width: 900px) {
 
-        .empty {
-            background: white;
-            padding: 30px;
-            text-align: center;
-            border-radius: 10px;
-            border: 1px solid #e1e5ea;
-            color: #6b7280;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================== */
-
-        @media (max-width: 600px) {
-            .navbar {
-                padding: 15px 20px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-
-            .user-area {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .container {
-                margin-top: 25px;
-            }
-
-            .aula-grid {
+            .aula-list {
                 grid-template-columns: 1fr;
             }
 
             .aula-card {
-                min-height: auto;
+                height: 500px;
             }
-
         }
 
+        /* =====================================================
+           RESPONSIVE MOBILE
+        ====================================================== */
+
+        @media (max-width: 600px) {
+
+            .header-inner {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .back-dashboard {
+                width: 100%;
+
+                text-align: center;
+            }
+
+            .page-heading h2 {
+                font-size: 25px;
+            }
+
+            .aula-card {
+                height: 540px;
+
+                border-radius: 14px;
+            }
+
+            .aula-content {
+                padding: 22px;
+            }
+
+            .aula-title h3 {
+                font-size: 25px;
+            }
+
+            .aula-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .aula-action {
+                justify-content: stretch;
+            }
+
+            .btn-pilih {
+                width: 100%;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
+    {{-- ==========================================================
+         HEADER
+    =========================================================== --}}
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+    <header class="header">
 
-    <div class="navbar">
+        <div class="header-inner">
 
+            <div class="brand">
 
-        <div class="brand">
+                <h1>SAPA</h1>
 
-            <h1>
-                SAPA
-            </h1>
+                <p>
+                    Sistem Aplikasi Pemanfaatan Aula
+                </p>
 
-            <p>
-                Sistem Aplikasi Pemakaian Aula
-            </p>
+            </div>
 
-        </div>
-
-
-        <div class="user-area">
-
-            <span class="user-name">
-                {{ $user->name }}
-            </span>
-
-
-            <form action="{{ route('logout') }}" method="POST">
-
-                @csrf
-
-                <button type="submit" class="logout">
-                    Logout
-                </button>
-
-            </form>
+            <a
+                href="{{ route('dashboard') }}"
+                class="back-dashboard"
+            >
+                ← Kembali ke Dashboard
+            </a>
 
         </div>
 
-    </div>
+    </header>
 
 
-
-    <!-- =========================
+    {{-- ==========================================================
          CONTENT
-    ========================== -->
+    =========================================================== --}}
 
-    <div class="container">
+    <main class="container">
 
-
-        <!-- =========================
-             HEADER
-        ========================== -->
-
-        <div class="top-section">
+        <div class="page-heading">
 
             <h2>
                 Daftar Aula
             </h2>
 
             <p>
-                Lihat informasi aula yang tersedia untuk mengajukan pemakaian aula.
+                Pilih aula yang sesuai dengan kebutuhan kegiatan Anda.
             </p>
-
-
-            <a href="{{ route('dashboard') }}" class="back">
-                ← Kembali ke Dashboard
-            </a>
 
         </div>
 
 
+        {{-- ======================================================
+             DAFTAR AULA
+        ======================================================= --}}
 
-        <!-- =========================
-             DATA AULA
-        ========================== -->
+        <div class="aula-list">
 
-        @if($aulas->count() > 0)
+            @foreach ($aulas as $aula)
 
+                @php
 
-            <div class="aula-grid">
+                    $namaAula = strtolower(
+                        $aula->nama_aula ?? ''
+                    );
 
+                    if (
+                        str_contains(
+                            $namaAula,
+                            'kecil'
+                        )
+                    ) {
 
-                @foreach($aulas as $aula)
+                        $foto = asset(
+                            'images/aula-kecil.jpg'
+                        );
 
+                        $optimal = '11 orang';
 
-                    <!-- =========================
-                         AULA CARD
-                    ========================== -->
+                        $ukuran = '7,6 × 4 meter';
 
-                    <div class="aula-card">
+                        $fasilitas =
+                            'TV 65 inch, Sound System';
 
+                    } else {
 
-                        <h3>
-                            {{ $aula->nama_aula }}
-                        </h3>
+                        $foto = asset(
+                            'images/aula-besar.jpg'
+                        );
 
+                        $optimal =
+                            'Sesuai kebutuhan';
 
-                        <!-- KAPASITAS -->
+                        $ukuran =
+                            '15,22 × 10,9 meter';
 
-                        <div class="capacity">
+                        $fasilitas =
+                            'Sistem Audio, Videotron';
+                    }
 
-                            Kapasitas:
-                            {{ $aula->kapasitas }}
-                            orang
-
-                        </div>
-
-
-
-                        <!-- KETERANGAN -->
-
-                        <div class="info">
-
-                            <strong>
-                                Keterangan
-                            </strong>
-
-                            <p>
-                                {{ $aula->keterangan }}
-                            </p>
-
-                        </div>
+                @endphp
 
 
-
-                        <!-- FASILITAS -->
-
-                        <div class="info">
-
-                            <strong>
-                                Fasilitas
-                            </strong>
-
-                            <p>
-                                {{ $aula->fasilitas ?? 'Belum ada informasi fasilitas.' }}
-                            </p>
-
-                        </div>
+                <article class="aula-card">
 
 
+                    {{-- ==================================================
+                         FOTO FULL
+                    =================================================== --}}
 
-                        <!-- PILIH AULA -->
+                    <div class="aula-photo">
 
-                        <a
-                            href="{{ route('pendaftaran.create', $aula->id) }}"
-                            class="btn-pilih"
+                        <img
+                            src="{{ $foto }}"
+                            alt="{{ $aula->nama_aula }}"
                         >
-                            PILIH AULA
-                        </a>
-
 
                     </div>
 
 
-                @endforeach
+                    {{-- ==================================================
+                         SEMUA INFORMASI DI ATAS FOTO
+                    =================================================== --}}
+
+                    <div class="aula-content">
 
 
-            </div>
+                        {{-- ==================================================
+                             JUDUL AULA
+                        =================================================== --}}
+
+                        <div class="aula-title">
+
+                            <h3>
+                                {{ $aula->nama_aula }}
+                            </h3>
+
+                            <span>
+                                Sistem Aplikasi Pemanfaatan Aula
+                            </span>
+
+                        </div>
 
 
-        @else
+                        {{-- ==================================================
+                             INFO AULA
+                        =================================================== --}}
+
+                        <div class="aula-info-grid">
+
+                            {{-- KAPASITAS OPTIMAL --}}
+
+                            <div class="info-box">
+
+                                <span class="info-label">
+                                    Kapasitas Optimal
+                                </span>
+
+                                <span class="info-value">
+                                    {{ $optimal }}
+                                </span>
+
+                            </div>
 
 
-            <!-- =========================
-                 DATA KOSONG
-            ========================== -->
+                            {{-- KAPASITAS MAKSIMUM --}}
 
-            <div class="empty">
+                            <div class="info-box">
 
-                Belum ada data aula yang tersedia.
+                                <span class="info-label">
+                                    Kapasitas Maksimum
+                                </span>
 
-            </div>
+                                <span class="info-value">
+                                    {{ $aula->kapasitas }} orang
+                                </span>
+
+                            </div>
 
 
-        @endif
+                            {{-- UKURAN AULA --}}
+
+                            <div class="info-box">
+
+                                <span class="info-label">
+                                    Ukuran Aula
+                                </span>
+
+                                <span class="info-value">
+                                    {{ $ukuran }}
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
-    </div>
+                        {{-- ==================================================
+                             FASILITAS
+                        =================================================== --}}
 
+                        <div class="facility">
+
+                            <div class="facility-title">
+                                Fasilitas
+                            </div>
+
+                            <div class="facility-text">
+                                {{ $fasilitas }}
+                            </div>
+
+                        </div>
+
+
+                        {{-- ==================================================
+                             BUTTON
+                        =================================================== --}}
+
+                        <div class="aula-action">
+
+                            <a
+                                href="{{ route('pendaftaran.create', $aula) }}"
+                                class="btn-pilih"
+                            >
+                                Pilih Aula
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+            @endforeach
+
+        </div>
+
+    </main>
 
 </body>
 

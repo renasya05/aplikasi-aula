@@ -9,78 +9,87 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Menampilkan halaman login
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN LOGIN
+    |--------------------------------------------------------------------------
+    */
+
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    /**
-     * Proses login
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES LOGIN
+    |--------------------------------------------------------------------------
+    */
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-        ], [
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($credentials)) {
+
             $request->session()->regenerate();
 
-            // Admin diarahkan ke dashboard admin
-            if (Auth::user()->role === 'admin') {
+            // Jika admin, masuk ke Dashboard Admin
+            if (Auth::user()->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             }
 
-            // User diarahkan ke dashboard pemohon
+            // Jika user biasa, masuk ke Dashboard Pengguna
             return redirect()->route('dashboard');
         }
 
-        return back()
-            ->withInput($request->only('email', 'remember'))
-            ->withErrors([
-                'email' => 'Email atau password yang dimasukkan salah.',
-            ]);
+        return back()->withErrors([
+            'email' => 'Email atau password yang dimasukkan salah.',
+        ])->onlyInput('email');
     }
 
-    /**
-     * Menampilkan halaman register
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN REGISTER
+    |--------------------------------------------------------------------------
+    */
+
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    /**
-     * Proses register
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES REGISTER
+    |--------------------------------------------------------------------------
+    */
+
     public function register(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', 'min:8'],
         ], [
             'name.required' => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email tersebut sudah terdaftar.',
+            'email.unique' => 'Email sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
+            'password.confirmed' => 'Konfirmasi password tidak sama.',
             'password.min' => 'Password minimal 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
+        // Semua akun yang mendaftar melalui halaman register
+        // otomatis menjadi user biasa.
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
             'role' => 'user',
         ]);
 
@@ -88,13 +97,15 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Registrasi berhasil. Selamat datang di SAPA.');
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Logout
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
+
     public function logout(Request $request)
     {
         Auth::logout();
@@ -102,7 +113,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')
-            ->with('success', 'Anda berhasil keluar dari SAPA.');
+        return redirect()->route('login');
     }
 }
